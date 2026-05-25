@@ -36,6 +36,11 @@ const parseApiDate = (value?: string) => {
   return Number.isNaN(date.getTime()) ? null : date;
 };
 
+const formatApiDate = (value?: string) => {
+  const date = parseApiDate(value);
+  return date ? date.toLocaleDateString("ja-JP") : "日付未設定";
+};
+
 const isNewsVisibleNow = (news: NewsApiItem, now: Date) => {
   const start = parseApiDate(news.acf?.start_at ?? news.start_at);
   const end = parseApiDate(news.acf?.end_at ?? news.end_at);
@@ -147,7 +152,17 @@ export default function Home() {
           : [];
 
         setNewsApiItems(
-          apiItems.filter((news) => isNewsVisibleNow(news, now)),
+          apiItems
+            .filter((news) => isNewsVisibleNow(news, now))
+            .sort((a, b) => {
+              const aStart = parseApiDate(
+                a.acf?.start_at ?? a.start_at,
+              )?.getTime() ?? Number.NEGATIVE_INFINITY;
+              const bStart = parseApiDate(
+                b.acf?.start_at ?? b.start_at,
+              )?.getTime() ?? Number.NEGATIVE_INFINITY;
+              return bStart - aStart;
+            }),
         );
         setNewsApiError(null);
       })
@@ -352,9 +367,14 @@ export default function Home() {
                   to={`/news/${news.id}`}
                   className="flex items-center gap-4 py-4 border-b border-gray-200 hover:bg-gray-50 transition-colors"
                 >
-                  <span className="bg-blue-500 text-white text-xs px-4 py-1 rounded-full whitespace-nowrap">
-                    {news.acf?.category ? news.acf.category : "カテゴリなし"}
-                  </span>
+                  <div className="flex flex-wrap items-center gap-3">
+                    <span className="bg-blue-500 text-white text-xs px-4 py-1 rounded-full whitespace-nowrap">
+                      {news.acf?.category ? news.acf.category : "カテゴリなし"}
+                    </span>
+                    <time className="text-xs text-gray-500 whitespace-nowrap">
+                      {formatApiDate(news.acf?.start_at ?? news.start_at)}
+                    </time>
+                  </div>
                   <p className="text-sm md:text-base text-gray-800">
                     {news.title && news.title.rendered ? news.title.rendered : "タイトルなし"}
                   </p>
