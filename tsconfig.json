@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "esnext",
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "jsx": "react-jsx",
+    "baseUrl": "./src",
+    "paths": {
+      "@/*": ["./*"],
+      "figma:asset/*": ["./assets/*"]
+    }
+  },
+  "include": ["src"],
+  "exclude": ["node_modules"]
+}

@@ -10,7 +10,6 @@ import { ImageWithFallback } from "./figma/ImageWithFallback";
 import { useState, useEffect } from "react";
 import { Link } from "react-router";
 import axios from "axios";
-import { newsItems } from "../data/newsData";
 import { eventsItems } from "../data/eventsData";
 import { shopsItems } from "../data/shopsData";
 import mainImage from "../../imports/main2.png";
