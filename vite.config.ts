@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite'
 import * as path from 'path'
 import react from '@vitejs/plugin-react'
+import tailwindcss from '@tailwindcss/vite'
 import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -21,6 +22,7 @@ function figmaAssetResolver() {
 export default defineConfig({
   plugins: [
     figmaAssetResolver(),
+    tailwindcss(),
     // The React plugin is required for Make, even if
     // Tailwind is not being actively used – do not remove it
     react(),
