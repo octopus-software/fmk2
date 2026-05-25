@@ -14,13 +14,44 @@ import { eventsItems } from "../data/eventsData";
 import { shopsItems } from "../data/shopsData";
 import mainImage from "../../imports/main2.png";
 
+type NewsApiItem = {
+  id: number;
+  title?: { rendered?: string };
+  acf?: {
+    category?: string;
+    start_at?: string;
+    end_at?: string;
+  };
+  start_at?: string;
+  end_at?: string;
+};
+
+const parseApiDate = (value?: string) => {
+  if (!value) return null;
+  const normalized =
+    value.includes(" ") && !value.includes("T")
+      ? value.replace(" ", "T")
+      : value;
+  const date = new Date(normalized);
+  return Number.isNaN(date.getTime()) ? null : date;
+};
+
+const isNewsVisibleNow = (news: NewsApiItem, now: Date) => {
+  const start = parseApiDate(news.acf?.start_at ?? news.start_at);
+  const end = parseApiDate(news.acf?.end_at ?? news.end_at);
+
+  if (start && now < start) return false;
+  if (end && now > end) return false;
+  return true;
+};
+
 export default function Home() {
   const [selectedCategory, setSelectedCategory] =
     useState("all");
   const [isTransitioning, setIsTransitioning] = useState(true);
   const [heroSlideIndex, setHeroSlideIndex] = useState(6);
   const [isMobile, setIsMobile] = useState(false);
-  const [newsApiItems, setNewsApiItems] = useState<any[]>([]);
+  const [newsApiItems, setNewsApiItems] = useState<NewsApiItem[]>([]);
   const [newsApiError, setNewsApiError] = useState<string | null>(null);
 
   const heroSlides = [
@@ -110,7 +141,14 @@ export default function Home() {
     axios
       .get("http://35.78.43.19/index.php?rest_route=/wp/v2/news")
       .then((response) => {
-        setNewsApiItems(response.data);
+        const now = new Date();
+        const apiItems = Array.isArray(response.data)
+          ? (response.data as NewsApiItem[])
+          : [];
+
+        setNewsApiItems(
+          apiItems.filter((news) => isNewsVisibleNow(news, now)),
+        );
         setNewsApiError(null);
       })
       .catch(() => {
@@ -308,7 +346,7 @@ export default function Home() {
           )}
           {newsApiItems.length > 0 ? (
             <div className="space-y-4 mb-8">
-              {newsApiItems.slice(0, 3).map((news: any) => (
+              {newsApiItems.slice(0, 5).map((news) => (
                 <Link
                   key={news.id}
                   to={`/news/${news.id}`}
@@ -324,6 +362,16 @@ export default function Home() {
               ))}
             </div>
           ) : null}
+
+          <div className="text-center mt-8">
+            <Link
+              to="/news"
+              className="inline-flex items-center gap-2 text-gray-700 hover:text-gray-900 transition-all hover:gap-3"
+            >
+              <span className="transition-transform">▶︎</span>
+              <span>MORE</span>
+            </Link>
+          </div>
         </div>
       </section>
 
