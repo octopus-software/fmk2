@@ -1,6 +1,6 @@
 import { Link } from "react-router";
-import { eventsItems } from "../data/eventsData";
-import { ImageWithFallback } from "./figma/ImageWithFallback";
+import { eventsItems } from "../app/data/eventsData";
+import { ImageWithFallback } from "../app/components/figma/ImageWithFallback";
 
 export default function Events() {
   return (

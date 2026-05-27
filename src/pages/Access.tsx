@@ -6,9 +6,9 @@ import {
   MapPin,
   Bike,
 } from "lucide-react";
-import { ImageWithFallback } from "./figma/ImageWithFallback";
-import trainRosenImage from "../../imports/train-rosen.gif";
-import parkingImage from "../../imports/parking.jpg";
+import { ImageWithFallback } from "../app/components/figma/ImageWithFallback";
+import trainRosenImage from "../imports/train-rosen.gif";
+import parkingImage from "../imports/parking.jpg";
 
 export default function Access() {
   return (

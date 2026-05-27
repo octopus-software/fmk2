@@ -1,7 +1,7 @@
 import { useParams, Link } from "react-router";
 import { Calendar, Clock, MapPin, Users, DollarSign, ArrowLeft } from "lucide-react";
-import { eventsItems } from "../data/eventsData";
-import { ImageWithFallback } from "./figma/ImageWithFallback";
+import { eventsItems } from "../app/data/eventsData";
+import { ImageWithFallback } from "../app/components/figma/ImageWithFallback";
 
 export default function EventDetail() {
   const { id } = useParams();

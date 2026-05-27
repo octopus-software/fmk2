@@ -6,13 +6,13 @@ import {
   ChevronLeft,
   ChevronRight,
 } from "lucide-react";
-import { ImageWithFallback } from "./figma/ImageWithFallback";
+import { ImageWithFallback } from "../app/components/figma/ImageWithFallback";
 import { useState, useEffect } from "react";
 import { Link } from "react-router";
 import axios from "axios";
-import { eventsItems } from "../data/eventsData";
-import { shopsItems } from "../data/shopsData";
-import mainImage from "../../imports/main2.png";
+import { eventsItems } from "../app/data/eventsData";
+import { shopsItems } from "../app/data/shopsData";
+import mainImage from "../imports/main2.png";
 
 type NewsApiItem = {
   id: number;

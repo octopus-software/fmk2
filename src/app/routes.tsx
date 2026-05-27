@@ -1,16 +1,16 @@
 import { createBrowserRouter } from "react-router";
-import Root from "./components/Root";
-import Home from "./components/Home";
-import News from "./components/News";
-import NewsDetail from "./components/NewsDetail";
-import Events from "./components/Events";
-import EventDetail from "./components/EventDetail";
-import ShopDetail from "./components/ShopDetail";
-import About from "./components/About";
-import Access from "./components/Access";
-import FloorGuide from "./components/FloorGuide";
-import Sitemap from "./components/Sitemap";
-import Contact from "./components/Contact";
+import Root from "../pages/Root";
+import Home from "../pages/Home";
+import News from "../pages/News";
+import NewsDetail from "../pages/NewsDetail";
+import Events from "../pages/Events";
+import EventDetail from "../pages/EventDetail";
+import ShopDetail from "../pages/ShopDetail";
+import About from "../pages/About";
+import Access from "../pages/Access";
+import FloorGuide from "../pages/FloorGuide";
+import Sitemap from "../pages/Sitemap";
+import Contact from "../pages/Contact";
 
 export const router = createBrowserRouter([
   {

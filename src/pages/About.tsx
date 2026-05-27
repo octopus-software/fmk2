@@ -8,10 +8,10 @@ import {
   Dog,
   Package,
 } from "lucide-react";
-import { ImageWithFallback } from "./figma/ImageWithFallback";
-import aboutMainImage from "../../imports/about_main.png";
-import aboutMainImage2 from "../../imports/about_main2.png";
-import aboutMainImage3 from "../../imports/about_main3.png";
+import { ImageWithFallback } from "../app/components/figma/ImageWithFallback";
+import aboutMainImage from "../imports/about_main.png";
+import aboutMainImage2 from "../imports/about_main2.png";
+import aboutMainImage3 from "../imports/about_main3.png";
 
 export default function About() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);

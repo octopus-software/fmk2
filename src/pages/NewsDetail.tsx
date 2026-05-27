@@ -1,6 +1,6 @@
 import { useParams, Link } from "react-router";
 import { Calendar, ArrowLeft } from "lucide-react";
-import { newsItems } from "../data/newsData";
+import { newsItems } from "../app/data/newsData";
 
 export default function NewsDetail() {
   const { id } = useParams();

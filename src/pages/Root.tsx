@@ -9,7 +9,7 @@ import {
   X,
 } from "lucide-react";
 import ScrollToHash from "./ScrollToHash";
-import logoImage from "../../imports/fmk2_logo.jpg";
+import logoImage from "../imports/fmk2_logo.jpg";
 
 export default function Root() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
