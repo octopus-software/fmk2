@@ -10,9 +10,12 @@ import { ImageWithFallback } from "../app/components/figma/ImageWithFallback";
 import { useState, useEffect } from "react";
 import { Link } from "react-router";
 import axios from "axios";
-import { eventsItems } from "../app/data/eventsData";
 import { shopsItems } from "../app/data/shopsData";
 import mainImage from "../imports/main2.png";
+import { fetchEvents } from "@/features/events/api/fetchEvents";
+import type { EventApiItem } from "@/features/events/types/events";
+import { formatEventDate, getEventImageUrl, isEventNew } from "@/features/events/utils/events";
+import { htmlToText } from "@/features/news/utils/text";
 
 type NewsApiItem = {
   id: number;
@@ -50,6 +53,44 @@ const isNewsVisibleNow = (news: NewsApiItem, now: Date) => {
   return true;
 };
 
+const parseEventPublishDate = (value?: string, now = new Date()) => {
+  if (!value) return null;
+
+  const timeOnly = value.match(/^(\d{2}):(\d{2})(?::(\d{2}))?$/);
+  if (timeOnly) {
+    const [, hh, mm, ss] = timeOnly;
+    const date = new Date(now);
+    date.setHours(Number(hh), Number(mm), Number(ss ?? "0"), 0);
+    return Number.isNaN(date.getTime()) ? null : date;
+  }
+
+  const normalized =
+    value.includes(" ") && !value.includes("T")
+      ? value.replace(" ", "T")
+      : value;
+  const parsed = new Date(normalized);
+  return Number.isNaN(parsed.getTime()) ? null : parsed;
+};
+
+const isEventVisibleNow = (event: EventApiItem, now: Date) => {
+  const start = parseEventPublishDate(event.acf?.publish_start_at, now);
+  const end = parseEventPublishDate(event.acf?.publish_end_at, now);
+
+  if (start && now < start) return false;
+  if (end && now > end) return false;
+  return true;
+};
+
+const getEventDateSortValue = (event: EventApiItem) => {
+  const raw = event.acf?.event_date;
+  if (raw && /^\d{8}$/.test(raw)) {
+    return Number(raw);
+  }
+
+  const fallback = parseApiDate(event.date)?.getTime();
+  return fallback ?? Number.NEGATIVE_INFINITY;
+};
+
 export default function Home() {
   const [selectedCategory, setSelectedCategory] =
     useState("all");
@@ -58,6 +99,8 @@ export default function Home() {
   const [isMobile, setIsMobile] = useState(false);
   const [newsApiItems, setNewsApiItems] = useState<NewsApiItem[]>([]);
   const [newsApiError, setNewsApiError] = useState<string | null>(null);
+  const [eventsApiItems, setEventsApiItems] = useState<EventApiItem[]>([]);
+  const [eventsApiError, setEventsApiError] = useState<string | null>(null);
 
   const heroSlides = [
     {
@@ -168,6 +211,22 @@ export default function Home() {
       })
       .catch(() => {
         setNewsApiError("ニュースAPIの取得に失敗しました");
+      });
+  }, []);
+
+  useEffect(() => {
+    fetchEvents()
+      .then((items) => {
+        const now = new Date();
+        setEventsApiItems(
+          items
+            .filter((event) => isEventVisibleNow(event, now))
+            .sort((a, b) => getEventDateSortValue(b) - getEventDateSortValue(a)),
+        );
+        setEventsApiError(null);
+      })
+      .catch(() => {
+        setEventsApiError("イベントAPIの取得に失敗しました");
       });
   }, []);
 
@@ -405,39 +464,47 @@ export default function Home() {
             <p className="text-sm text-gray-600">イベント</p>
           </div>
 
+          {eventsApiError && (
+            <div className="text-red-500 text-center mb-4">{eventsApiError}</div>
+          )}
+
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-            {eventsItems.slice(0, 4).map((event) => (
+            {eventsApiItems.slice(0, 4).map((event) => (
               <Link
                 key={event.id}
                 to={`/events/${event.id}`}
                 className="bg-white rounded-lg overflow-hidden shadow hover:shadow-lg transition-shadow cursor-pointer"
               >
                 <div className="relative">
-                  {event.isNew && (
+                  {isEventNew(event.acf?.publish_start_at ?? event.date) && (
                     <div className="absolute top-3 left-3 bg-red-600 text-white text-xs px-3 py-1 rounded z-10">
                       NEW
                     </div>
                   )}
                   <ImageWithFallback
-                    src={event.image}
-                    alt={event.title}
+                    src={getEventImageUrl(event)}
+                    alt={htmlToText(event.title?.rendered) || "イベント画像"}
                     className="w-full aspect-square object-cover"
                   />
                 </div>
                 <div className="p-4">
                   <div className="inline-block bg-gray-200 text-gray-700 text-xs px-3 py-1 rounded mb-3">
-                    {event.category}
+                    {event.acf?.category ?? "カテゴリなし"}
                   </div>
                   <p className="text-sm text-gray-600 mb-2">
-                    {event.date}
+                    {formatEventDate(event.acf?.event_date ?? event.date)}
                   </p>
-                  <h3 className="text-base leading-relaxed">
-                    {event.title}
+                  <h3 className="text-base leading-relaxed line-clamp-2">
+                    {htmlToText(event.title?.rendered) || "タイトルなし"}
                   </h3>
                 </div>
               </Link>
             ))}
           </div>
+
+          {!eventsApiError && eventsApiItems.length === 0 && (
+            <div className="text-gray-600 text-center mt-4">イベントはありません</div>
+          )}
 
           <div className="text-center mt-8">
             <Link
