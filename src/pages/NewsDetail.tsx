@@ -1,16 +1,82 @@
+import { useEffect, useMemo, useState } from "react";
 import { useParams, Link } from "react-router";
 import { Calendar, ArrowLeft } from "lucide-react";
-import { newsItems } from "../app/data/newsData";
+import {
+  fetchNews,
+  fetchNewsById,
+  filterStartedNews,
+  sortNewsByStartAtDesc,
+} from "@/features/news/api/fetchNews";
+import type { NewsApiItem } from "@/features/news/types/news";
+import { formatDate } from "@/features/news/utils/date";
+import { htmlToText } from "@/features/news/utils/text";
 
 export default function NewsDetail() {
   const { id } = useParams();
-  const newsItem = newsItems.find((item) => item.id === Number(id));
+  const newsId = useMemo(() => Number(id), [id]);
 
-  if (!newsItem) {
+  const [newsItem, setNewsItem] = useState<NewsApiItem | null>(null);
+  const [relatedItems, setRelatedItems] = useState<NewsApiItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    const load = async () => {
+      if (!Number.isFinite(newsId) || newsId <= 0) {
+        setError("お知らせが見つかりません");
+        setLoading(false);
+        return;
+      }
+
+      setLoading(true);
+      try {
+        const [detail, list] = await Promise.all([
+          fetchNewsById(newsId),
+          fetchNews(),
+        ]);
+
+        const related = sortNewsByStartAtDesc(filterStartedNews(list))
+          .filter((item) => item.id !== newsId)
+          .slice(0, 4);
+
+        if (!cancelled) {
+          setNewsItem(detail);
+          setRelatedItems(related);
+          setError(null);
+        }
+      } catch {
+        if (!cancelled) {
+          setError("お知らせの取得に失敗しました");
+        }
+      } finally {
+        if (!cancelled) {
+          setLoading(false);
+        }
+      }
+    };
+
+    load();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [newsId]);
+
+  if (loading) {
+    return (
+      <div className="bg-gray-50 min-h-screen flex items-center justify-center">
+        <div className="text-gray-600">読み込み中...</div>
+      </div>
+    );
+  }
+
+  if (error || !newsItem) {
     return (
       <div className="bg-gray-50 min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-2xl mb-4 text-gray-800">お知らせが見つかりません</h1>
+          <h1 className="text-2xl mb-4 text-gray-800">{error ?? "お知らせが見つかりません"}</h1>
           <Link
             to="/news"
             className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 transition-colors"
@@ -51,26 +117,27 @@ export default function NewsDetail() {
           <div className="flex flex-wrap items-center gap-4 mb-6 pb-6 border-b border-gray-200">
             <div className="flex items-center gap-2 text-gray-600">
               <Calendar className="w-4 h-4" />
-              <time className="text-sm">{newsItem.date}</time>
+              <time className="text-sm">{formatDate(newsItem.acf?.start_at ?? newsItem.date)}</time>
             </div>
-            <span
-              className={`${newsItem.categoryColor} text-white text-xs px-4 py-1 rounded-full`}
-            >
-              {newsItem.category}
+            <span className="bg-blue-500 text-white text-xs px-4 py-1 rounded-full">
+              {newsItem.acf?.category ?? "カテゴリなし"}
             </span>
           </div>
 
           {/* Title */}
-          <h1 className="text-3xl md:text-4xl mb-8 text-gray-900 leading-relaxed">
-            {newsItem.title}
+          <h1 className="text-xl md:text-2xl mb-8 text-gray-900 leading-relaxed">
+            {htmlToText(newsItem.title?.rendered) || "タイトルなし"}
           </h1>
 
           {/* Content */}
-          <div className="prose prose-lg max-w-none">
-            <div className="text-gray-700 leading-relaxed whitespace-pre-line">
-              {newsItem.fullContent || newsItem.content}
-            </div>
-          </div>
+          {newsItem.content?.rendered ? (
+            <div
+              className="wp-content"
+              dangerouslySetInnerHTML={{ __html: newsItem.content.rendered }}
+            />
+          ) : (
+            <p>本文なし</p>
+          )}
 
           {/* Back Button */}
           <div className="mt-12 pt-8 border-t border-gray-200">
@@ -85,33 +152,32 @@ export default function NewsDetail() {
         </article>
 
         {/* Related News */}
-        <div className="mt-12">
-          <h2 className="text-2xl mb-6 text-gray-900">その他のお知らせ</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {newsItems
-              .filter((item) => item.id !== newsItem.id)
-              .slice(0, 4)
-              .map((item) => (
+        {relatedItems.length > 0 && (
+          <div className="mt-12">
+            <h2 className="text-2xl mb-6 text-gray-900">その他のお知らせ</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {relatedItems.map((item) => (
                 <Link
                   key={item.id}
                   to={`/news/${item.id}`}
                   className="bg-white rounded-lg shadow hover:shadow-lg transition-shadow p-6"
                 >
                   <div className="flex items-center gap-3 mb-3">
-                    <time className="text-sm text-gray-600">{item.date}</time>
-                    <span
-                      className={`${item.categoryColor} text-white text-xs px-3 py-1 rounded-full`}
-                    >
-                      {item.category}
+                    <time className="text-sm text-gray-600">
+                      {formatDate(item.acf?.start_at ?? item.date)}
+                    </time>
+                    <span className="bg-blue-500 text-white text-xs px-3 py-1 rounded-full">
+                      {item.acf?.category ?? "カテゴリなし"}
                     </span>
                   </div>
                   <h3 className="text-base text-gray-900 hover:text-blue-600 transition-colors line-clamp-2">
-                    {item.title}
+                    {htmlToText(item.title?.rendered) || "タイトルなし"}
                   </h3>
                 </Link>
               ))}
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );

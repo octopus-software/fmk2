@@ -45,6 +45,11 @@ export const fetchNews = async (): Promise<NewsApiItem[]> => {
   return [...firstItems, ...restItems];
 };
 
+export const fetchNewsById = async (id: number): Promise<NewsApiItem> => {
+  const response = await axios.get(`${NEWS_API_URL}/${id}`);
+  return response.data as NewsApiItem;
+};
+
 export const filterStartedNews = (items: NewsApiItem[], now = Date.now()) => {
   return items.filter((item) => {
     const startAtTime = toTime(item.acf?.start_at);
