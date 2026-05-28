@@ -8,7 +8,7 @@ import {
   sortNewsByStartAtDesc,
 } from "@/features/news/api/fetchNews";
 import type { NewsApiItem } from "@/features/news/types/news";
-import { formatDate } from "@/features/news/utils/date";
+import { formatDate, toTime } from "@/features/news/utils/date";
 import { htmlToText } from "@/features/news/utils/text";
 
 export default function NewsDetail() {
@@ -19,13 +19,14 @@ export default function NewsDetail() {
   const [relatedItems, setRelatedItems] = useState<NewsApiItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [notFound, setNotFound] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
 
     const load = async () => {
       if (!Number.isFinite(newsId) || newsId <= 0) {
-        setError("お知らせが見つかりません");
+        setNotFound(true);
         setLoading(false);
         return;
       }
@@ -42,13 +43,30 @@ export default function NewsDetail() {
           .slice(0, 4);
 
         if (!cancelled) {
+          // start_atが未来のお知らせは詳細ページで404扱い
+          if (toTime(detail.acf?.start_at) > Date.now()) {
+            setNotFound(true);
+            setNewsItem(null);
+            setRelatedItems([]);
+            setError(null);
+            return;
+          }
+
+          setNotFound(false);
           setNewsItem(detail);
           setRelatedItems(related);
           setError(null);
         }
-      } catch {
+      } catch (e: unknown) {
         if (!cancelled) {
-          setError("お知らせの取得に失敗しました");
+          const status = (e as { response?: { status?: number } })?.response?.status;
+          if (status === 404) {
+            setNotFound(true);
+            setError(null);
+          } else {
+            setNotFound(false);
+            setError("お知らせの取得に失敗しました");
+          }
         }
       } finally {
         if (!cancelled) {
@@ -68,6 +86,23 @@ export default function NewsDetail() {
     return (
       <div className="bg-gray-50 min-h-screen flex items-center justify-center">
         <div className="text-gray-600">読み込み中...</div>
+      </div>
+    );
+  }
+
+  if (notFound) {
+    return (
+      <div className="bg-gray-50 min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-2xl mb-4 text-gray-800">404: お知らせが見つかりません</h1>
+          <Link
+            to="/news"
+            className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 transition-colors"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            <span>お知らせ一覧に戻る</span>
+          </Link>
+        </div>
       </div>
     );
   }
