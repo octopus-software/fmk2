@@ -5,6 +5,7 @@ import News from "../pages/News";
 import NewsDetail from "../pages/NewsDetail";
 import Events from "../pages/Events";
 import EventDetail from "../pages/EventDetail";
+import PickupDetail from "../pages/PickupDetail";
 import ShopDetail from "../pages/ShopDetail";
 import About from "../pages/About";
 import Access from "../pages/Access";
@@ -27,6 +28,7 @@ export const router = createBrowserRouter([
       { path: "news/:id", Component: NewsDetail },
       { path: "events", Component: Events },
       { path: "events/:id", Component: EventDetail },
+      { path: "pickups/:id", Component: PickupDetail },
       { path: "shops/:id", Component: ShopDetail },
     ],
   },

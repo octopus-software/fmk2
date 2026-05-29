@@ -12,6 +12,9 @@ import { Link } from "react-router";
 import axios from "axios";
 import { shopsItems } from "../app/data/shopsData";
 import mainImage from "../imports/main2.png";
+import { fetchPickups } from "@/features/pickups/api/fetchPickups";
+import type { PickupApiItem } from "@/features/pickups/types/pickups";
+import { getPickupImageUrl, isPickupVisibleNow } from "@/features/pickups/utils/pickups";
 import { fetchEvents } from "@/features/events/api/fetchEvents";
 import type { EventApiItem } from "@/features/events/types/events";
 import { formatEventDate, getEventImageUrl, isEventNew } from "@/features/events/utils/events";
@@ -95,57 +98,16 @@ export default function Home() {
   const [selectedCategory, setSelectedCategory] =
     useState("all");
   const [isTransitioning, setIsTransitioning] = useState(true);
-  const [heroSlideIndex, setHeroSlideIndex] = useState(6);
+  const [heroSlideIndex, setHeroSlideIndex] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
+  const [pickupApiItems, setPickupApiItems] = useState<PickupApiItem[]>([]);
+  const [pickupApiError, setPickupApiError] = useState<string | null>(null);
   const [newsApiItems, setNewsApiItems] = useState<NewsApiItem[]>([]);
   const [newsApiError, setNewsApiError] = useState<string | null>(null);
   const [eventsApiItems, setEventsApiItems] = useState<EventApiItem[]>([]);
   const [eventsApiError, setEventsApiError] = useState<string | null>(null);
 
-  const heroSlides = [
-    {
-      image:
-        "https://images.unsplash.com/photo-1483985988355-763728e1935b?w=800&h=800&fit=crop",
-      title: "ゴールデンウィーク\nセール",
-      subtitle: "4/25-5/6",
-      description: "全館20%OFF",
-    },
-    {
-      image:
-        "https://images.unsplash.com/photo-1730749387748-79e6d50a269c?w=800&h=800&fit=crop",
-      title: "母の日\nギフトフェア",
-      subtitle: "5/1-5/11",
-      description: "特別ラッピング無料",
-    },
-    {
-      image:
-        "https://images.unsplash.com/photo-1610832958506-aa56368176cf?w=800&h=800&fit=crop",
-      title: "週末マルシェ",
-      subtitle: "毎週土日開催",
-      description: "地元の新鮮野菜",
-    },
-    {
-      image:
-        "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=800&h=800&fit=crop",
-      title: "春の\nファッションフェア",
-      subtitle: "4/20-4/30",
-      description: "新作最大30%OFF",
-    },
-    {
-      image:
-        "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800&h=800&fit=crop",
-      title: "グルメ\nフェスティバル",
-      subtitle: "5/10-5/12",
-      description: "期間限定メニュー",
-    },
-    {
-      image:
-        "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=800&h=800&fit=crop",
-      title: "新店舗\nオープン",
-      subtitle: "5/1 GRAND OPEN",
-      description: "オープン記念セール",
-    },
-  ];
+  const heroSlides = pickupApiItems;
 
   useEffect(() => {
     const checkMobile = () => {
@@ -160,14 +122,34 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
+    fetchPickups()
+      .then((items) => {
+        const now = new Date();
+        const visible = items.filter((item) => isPickupVisibleNow(item, now));
+        setPickupApiItems(visible);
+        setPickupApiError(null);
+        if (visible.length > 0) {
+          setHeroSlideIndex(visible.length);
+        }
+      })
+      .catch(() => {
+        setPickupApiError("ピックアップAPIの取得に失敗しました");
+      });
+  }, []);
+
+  useEffect(() => {
+    if (heroSlides.length === 0) return;
+
     const timer = setInterval(() => {
       setHeroSlideIndex((prev) => prev + 1);
     }, 5000);
 
     return () => clearInterval(timer);
-  }, [heroSlideIndex]);
+  }, [heroSlides.length]);
 
   useEffect(() => {
+    if (heroSlides.length === 0) return;
+
     if (heroSlideIndex >= heroSlides.length * 2) {
       const timeout = setTimeout(() => {
         setIsTransitioning(false);
@@ -231,10 +213,12 @@ export default function Home() {
   }, []);
 
   const nextSlide = () => {
+    if (heroSlides.length === 0) return;
     setHeroSlideIndex((prev) => prev + 1);
   };
 
   const prevSlide = () => {
+    if (heroSlides.length === 0) return;
     setHeroSlideIndex((prev) => prev - 1);
   };
 
@@ -325,82 +309,93 @@ export default function Home() {
       {/* Hero Section */}
       <section className="bg-white pb-8">
         <div className="relative">
-          <div className="overflow-hidden relative">
-            <div
-              className={`flex ${isTransitioning ? "transition-transform duration-500 ease-in-out" : ""}`}
-              style={{
-                transform: isMobile
-                  ? `translateX(-${heroSlideIndex * 100}%)`
-                  : `translateX(-${(heroSlideIndex * 100) / 4}%)`,
-              }}
-            >
-              {[
-                ...heroSlides,
-                ...heroSlides,
-                ...heroSlides,
-              ].map((s, i) => (
+          {pickupApiError && (
+            <div className="text-red-500 text-center mb-4">{pickupApiError}</div>
+          )}
+
+          {heroSlides.length === 0 && !pickupApiError ? (
+            <div className="text-center text-gray-600 py-8">ピックアップはありません</div>
+          ) : (
+            <>
+              <div className="overflow-hidden relative">
                 <div
-                  key={i}
-                  className="flex-shrink-0 w-full md:w-1/4 relative overflow-hidden group cursor-pointer"
+                  className={`flex ${isTransitioning ? "transition-transform duration-500 ease-in-out" : ""}`}
+                  style={{
+                    transform: isMobile
+                      ? `translateX(-${heroSlideIndex * 100}%)`
+                      : `translateX(-${(heroSlideIndex * 100) / 4}%)`,
+                  }}
                 >
-                  <ImageWithFallback
-                    src={s.image}
-                    alt={s.title}
-                    className="w-full aspect-square object-cover"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent flex flex-col justify-end p-6 md:p-8">
-                    <p className="text-white text-sm md:text-base mb-2 opacity-90">
-                      {s.subtitle}
-                    </p>
-                    <h3 className="text-white text-2xl md:text-3xl mb-2 whitespace-pre-line">
-                      {s.title}
-                    </h3>
-                    <p className="text-white text-base md:text-lg opacity-90">
-                      {s.description}
-                    </p>
-                  </div>
+                  {[
+                    ...heroSlides,
+                    ...heroSlides,
+                    ...heroSlides,
+                  ].map((s, i) => (
+                    <Link
+                      key={`${s.id}-${i}`}
+                      to={`/pickups/${s.id}`}
+                      className="flex-shrink-0 w-full md:w-1/4 relative overflow-hidden group cursor-pointer"
+                    >
+                      <ImageWithFallback
+                        src={getPickupImageUrl(s)}
+                        alt={htmlToText(s.title?.rendered) || "ピックアップ画像"}
+                        className="w-full aspect-square object-cover"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent flex flex-col justify-end p-6 md:p-8">
+                        <p className="text-white text-sm md:text-base mb-2 opacity-90">
+                          {s.acf?.pickup_period ?? ""}
+                        </p>
+                        <h3 className="text-white text-2xl md:text-3xl mb-2 whitespace-pre-line">
+                          {htmlToText(s.title?.rendered) || "タイトルなし"}
+                        </h3>
+                        <p className="text-white text-base md:text-lg opacity-90">
+                          {s.acf?.subtitle ?? ""}
+                        </p>
+                      </div>
+                    </Link>
+                  ))}
                 </div>
-              ))}
-            </div>
-            {/* Edge Overlays - Desktop only */}
-            <div className="hidden md:block absolute left-0 top-0 bottom-0 w-1/4 bg-black/40 pointer-events-none"></div>
-            <div className="hidden md:block absolute right-0 top-0 bottom-0 w-1/4 bg-black/40 pointer-events-none"></div>
-          </div>
+                {/* Edge Overlays - Desktop only */}
+                <div className="hidden md:block absolute left-0 top-0 bottom-0 w-1/4 bg-black/40 pointer-events-none"></div>
+                <div className="hidden md:block absolute right-0 top-0 bottom-0 w-1/4 bg-black/40 pointer-events-none"></div>
+              </div>
 
-          {/* Navigation Arrows */}
-          <button
-            onClick={prevSlide}
-            className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-gray-800 p-2 rounded-full shadow-lg transition-all z-10"
-            aria-label="Previous slide"
-          >
-            <ChevronLeft className="w-5 h-5" />
-          </button>
-          <button
-            onClick={nextSlide}
-            className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-gray-800 p-2 rounded-full shadow-lg transition-all z-10"
-            aria-label="Next slide"
-          >
-            <ChevronRight className="w-5 h-5" />
-          </button>
-
-          {/* Dots Indicator */}
-          <div className="flex justify-center gap-2 mt-6">
-            {heroSlides.map((_, index) => (
+              {/* Navigation Arrows */}
               <button
-                key={index}
-                onClick={() => {
-                  setIsTransitioning(true);
-                  setHeroSlideIndex(heroSlides.length + index);
-                }}
-                className={`h-2 rounded-full transition-all ${
-                  heroSlideIndex % heroSlides.length === index
-                    ? "bg-blue-600 w-8"
-                    : "bg-gray-300 w-2"
-                }`}
-                aria-label={`Go to slide ${index + 1}`}
-              />
-            ))}
-          </div>
+                onClick={prevSlide}
+                className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-gray-800 p-2 rounded-full shadow-lg transition-all z-10"
+                aria-label="Previous slide"
+              >
+                <ChevronLeft className="w-5 h-5" />
+              </button>
+              <button
+                onClick={nextSlide}
+                className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-gray-800 p-2 rounded-full shadow-lg transition-all z-10"
+                aria-label="Next slide"
+              >
+                <ChevronRight className="w-5 h-5" />
+              </button>
+
+              {/* Dots Indicator */}
+              <div className="flex justify-center gap-2 mt-6">
+                {heroSlides.map((_, index) => (
+                  <button
+                    key={index}
+                    onClick={() => {
+                      setIsTransitioning(true);
+                      setHeroSlideIndex(heroSlides.length + index);
+                    }}
+                    className={`h-2 rounded-full transition-all ${
+                      heroSlideIndex % heroSlides.length === index
+                        ? "bg-blue-600 w-8"
+                        : "bg-gray-300 w-2"
+                    }`}
+                    aria-label={`Go to slide ${index + 1}`}
+                  />
+                ))}
+              </div>
+            </>
+          )}
         </div>
       </section>
 
