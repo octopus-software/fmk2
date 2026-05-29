@@ -21,3 +21,9 @@ Stop containers:
 ```bash
 docker compose down
 ```
+
+## Image directories
+
+- `src/assets/images`: React/TypeScript から `import` して使う画像
+- `public/images`: URL 直指定で使う固定画像（例: `/images/logo.png`）
+- WordPress の投稿画像: WP メディア（`wp-content/uploads`）を API の URL で表示

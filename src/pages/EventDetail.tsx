@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useParams, Link } from "react-router";
 import { Calendar, Clock, MapPin, Users, DollarSign, ArrowLeft } from "lucide-react";
-import { ImageWithFallback } from "../app/components/figma/ImageWithFallback";
+import { ImageWithFallback } from "../components/figma/ImageWithFallback";
 import { fetchEventById, fetchEvents } from "@/features/events/api/fetchEvents";
 import {
   formatEventDate,

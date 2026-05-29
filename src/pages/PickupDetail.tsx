@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useParams } from "react-router";
 import { ArrowLeft, Calendar } from "lucide-react";
-import { ImageWithFallback } from "../app/components/figma/ImageWithFallback";
+import { ImageWithFallback } from "../components/figma/ImageWithFallback";
 import { fetchPickupById, fetchPickups } from "@/features/pickups/api/fetchPickups";
 import type { PickupApiItem } from "@/features/pickups/types/pickups";
 import { getPickupImageUrl, isPickupVisibleNow } from "@/features/pickups/utils/pickups";

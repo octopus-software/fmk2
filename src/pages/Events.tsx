@@ -1,6 +1,6 @@
 import { Link, useSearchParams } from "react-router";
 import { useEffect, useMemo, useState } from "react";
-import { ImageWithFallback } from "../app/components/figma/ImageWithFallback";
+import { ImageWithFallback } from "../components/figma/ImageWithFallback";
 import { fetchEvents } from "@/features/events/api/fetchEvents";
 import { EVENTS_PAGE_SIZE } from "@/features/events/constants/events";
 import { formatEventDate, getEventImageUrl, isEventNew } from "@/features/events/utils/events";

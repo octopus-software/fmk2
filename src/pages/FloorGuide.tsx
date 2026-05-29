@@ -1,7 +1,7 @@
 import { Link } from "react-router";
 import { Building2 } from "lucide-react";
-import { shopsItems } from "../app/data/shopsData";
-import { ImageWithFallback } from "../app/components/figma/ImageWithFallback";
+import { shopsItems } from "../data/shopsData";
+import { ImageWithFallback } from "../components/figma/ImageWithFallback";
 
 export default function FloorGuide() {
   const floors = [

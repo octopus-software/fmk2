@@ -6,12 +6,12 @@ import {
   ChevronLeft,
   ChevronRight,
 } from "lucide-react";
-import { ImageWithFallback } from "../app/components/figma/ImageWithFallback";
+import { ImageWithFallback } from "../components/figma/ImageWithFallback";
 import { useState, useEffect } from "react";
 import { Link } from "react-router";
 import axios from "axios";
-import { shopsItems } from "../app/data/shopsData";
-import mainImage from "../imports/main2.png";
+import { shopsItems } from "../data/shopsData";
+import mainImage from "figma:asset/images/hero.png";
 import { fetchPickups } from "@/features/pickups/api/fetchPickups";
 import type { PickupApiItem } from "@/features/pickups/types/pickups";
 import { getPickupImageUrl, isPickupVisibleNow } from "@/features/pickups/utils/pickups";

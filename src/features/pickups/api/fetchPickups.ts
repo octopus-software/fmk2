@@ -11,7 +11,11 @@ const buildParams = (page: number) => ({
   _embed: true,
 });
 
+/**
+ * ピックアップ情報一覧を取得する
+ */
 export const fetchPickups = async (): Promise<PickupApiItem[]> => {
+  // まず1ページ目を取得し、ヘッダーから総ページ数を判定する
   const firstResponse = await axios.get(PICKUPS_API_URL, {
     params: buildParams(1),
   });
@@ -25,8 +29,10 @@ export const fetchPickups = async (): Promise<PickupApiItem[]> => {
     ? totalPagesRaw
     : 1;
 
+  // 1ページのみなら追加リクエスト不要
   if (totalPages === 1) return firstItems;
 
+  // 2ページ目以降を並列取得して結合する
   const restResponses = await Promise.all(
     Array.from({ length: totalPages - 1 }, (_, i) =>
       axios.get(PICKUPS_API_URL, {
@@ -42,11 +48,15 @@ export const fetchPickups = async (): Promise<PickupApiItem[]> => {
   return [...firstItems, ...restItems];
 };
 
+/**
+ * IDに紐づくピックアップ情報を取得する
+ * @param id
+ */
 export const fetchPickupById = async (id: number): Promise<PickupApiItem> => {
+  // 詳細では埋め込みメディアも同時取得する
   const response = await axios.get(`${PICKUPS_API_URL}/${id}`, {
     params: { _embed: true },
   });
 
   return response.data as PickupApiItem;
 };
-

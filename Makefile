@@ -2,8 +2,7 @@
 
 up:
 	docker compose up -d
-	docker compose exec web sh
 
 shell:
+	docker compose up -d
 	docker compose exec web sh
-
