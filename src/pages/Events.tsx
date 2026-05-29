@@ -86,7 +86,7 @@ export default function Events() {
       nextParams.set("page", String(nextPage));
     }
     setSearchParams(nextParams);
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    window.scrollTo({ top: 0, behavior: "auto" });
   };
 
   useEffect(() => {
@@ -180,41 +180,43 @@ export default function Events() {
                 {currentPage} / {totalPages} ページ・表示中 {pagedEvents.length} 件
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-6">
                 {pagedEvents.map((event) => (
                   <Link
                     key={event.id}
                     to={`/events/${event.id}`}
                     className="bg-white rounded-lg overflow-hidden shadow hover:shadow-xl transition-all transform hover:-translate-y-1"
                   >
-                    <div className="relative">
-                      {isEventNew(event.acf?.publish_start_at ?? event.date) && (
-                        <div className="absolute top-3 left-3 bg-red-600 text-white text-xs px-3 py-1 rounded z-10">
-                          NEW
-                        </div>
-                      )}
-                      <ImageWithFallback
-                        src={getEventImageUrl(event)}
-                        alt={htmlToText(event.title?.rendered) || "イベント画像"}
-                        className="w-full aspect-square object-cover"
-                      />
-                    </div>
-                    <div className="p-4">
-                      <div className="inline-block bg-gray-200 text-gray-700 text-xs px-3 py-1 rounded mb-3">
-                        {event.acf?.category ?? "カテゴリなし"}
-                      </div>
-                      <p className="text-sm text-gray-600 mb-2">
-                        {formatEventDate(event.acf?.event_date ?? event.date)}
-                      </p>
-                      <h3 className="text-base leading-relaxed mb-2 line-clamp-2 hover:text-purple-600 transition-colors">
-                        {htmlToText(event.title?.rendered) || "タイトルなし"}
-                      </h3>
-                      <p className="text-sm text-gray-500 line-clamp-2">
-                        {truncateText(
-                          htmlToText(event.content?.rendered) || "イベント詳細は準備中です",
-                          80,
+                    <div className="flex md:block">
+                      <div className="relative w-32 sm:w-40 md:w-full shrink-0">
+                        {isEventNew(event.acf?.publish_start_at ?? event.date) && (
+                          <div className="absolute top-2 left-2 md:top-3 md:left-3 bg-red-600 text-white text-[10px] md:text-xs px-2 py-0.5 md:px-3 md:py-1 rounded z-10">
+                            NEW
+                          </div>
                         )}
-                      </p>
+                        <ImageWithFallback
+                          src={getEventImageUrl(event)}
+                          alt={htmlToText(event.title?.rendered) || "イベント画像"}
+                          className="w-full h-full aspect-square md:aspect-square object-cover"
+                        />
+                      </div>
+                      <div className="p-3 md:p-4 flex-1 min-w-0">
+                        <div className="inline-block bg-gray-200 text-gray-700 text-[10px] md:text-xs px-2 py-0.5 md:px-3 md:py-1 rounded mb-2 md:mb-3">
+                          {event.acf?.category ?? "カテゴリなし"}
+                        </div>
+                        <p className="text-xs md:text-sm text-gray-600 mb-1 md:mb-2">
+                          {formatEventDate(event.acf?.event_date ?? event.date)}
+                        </p>
+                        <h3 className="text-sm md:text-base leading-relaxed mb-1 md:mb-2 line-clamp-2 hover:text-purple-600 transition-colors">
+                          {htmlToText(event.title?.rendered) || "タイトルなし"}
+                        </h3>
+                        <p className="text-xs md:text-sm text-gray-500 line-clamp-2">
+                          {truncateText(
+                            htmlToText(event.content?.rendered) || "イベント詳細は準備中です",
+                            80,
+                          )}
+                        </p>
+                      </div>
                     </div>
                   </Link>
                 ))}

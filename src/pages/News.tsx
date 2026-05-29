@@ -76,7 +76,7 @@ export default function News() {
       nextParams.set("page", String(nextPage));
     }
     setSearchParams(nextParams);
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    window.scrollTo({ top: 0, behavior: "auto" });
   };
 
   useEffect(() => {

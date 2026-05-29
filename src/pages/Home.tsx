@@ -419,19 +419,21 @@ export default function Home() {
                 <Link
                   key={news.id}
                   to={`/news/${news.id}`}
-                  className="flex items-center gap-4 py-4 border-b border-gray-200 hover:bg-gray-50 transition-colors"
+                  className="block py-4 border-b border-gray-200 hover:bg-gray-50 transition-colors"
                 >
-                  <div className="flex flex-wrap items-center gap-3">
-                    <span className="bg-blue-500 text-white text-xs px-4 py-1 rounded-full whitespace-nowrap">
-                      {news.acf?.category ? news.acf.category : "カテゴリなし"}
-                    </span>
-                    <time className="text-xs text-gray-500 whitespace-nowrap">
-                      {formatApiDate(news.acf?.start_at ?? news.start_at)}
-                    </time>
+                  <div className="flex flex-col gap-2 md:flex-row md:items-center md:gap-4">
+                    <div className="flex flex-wrap items-center gap-3">
+                      <span className="bg-blue-500 text-white text-xs px-4 py-1 rounded-full whitespace-nowrap">
+                        {news.acf?.category ? news.acf.category : "カテゴリなし"}
+                      </span>
+                      <time className="text-xs text-gray-500 whitespace-nowrap">
+                        {formatApiDate(news.acf?.start_at ?? news.start_at)}
+                      </time>
+                    </div>
+                    <p className="text-sm md:text-base text-gray-800">
+                      {news.title && news.title.rendered ? news.title.rendered : "タイトルなし"}
+                    </p>
                   </div>
-                  <p className="text-sm md:text-base text-gray-800">
-                    {news.title && news.title.rendered ? news.title.rendered : "タイトルなし"}
-                  </p>
                 </Link>
               ))}
             </div>
@@ -463,7 +465,7 @@ export default function Home() {
             <div className="text-red-500 text-center mb-4">{eventsApiError}</div>
           )}
 
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6">
             {eventsApiItems.slice(0, 4).map((event) => (
               <Link
                 key={event.id}
@@ -472,7 +474,7 @@ export default function Home() {
               >
                 <div className="relative">
                   {isEventNew(event.acf?.publish_start_at ?? event.date) && (
-                    <div className="absolute top-3 left-3 bg-red-600 text-white text-xs px-3 py-1 rounded z-10">
+                    <div className="absolute top-2 left-2 md:top-3 md:left-3 bg-red-600 text-white text-[10px] md:text-xs px-2 py-0.5 md:px-3 md:py-1 rounded z-10">
                       NEW
                     </div>
                   )}
@@ -482,14 +484,14 @@ export default function Home() {
                     className="w-full aspect-square object-cover"
                   />
                 </div>
-                <div className="p-4">
-                  <div className="inline-block bg-gray-200 text-gray-700 text-xs px-3 py-1 rounded mb-3">
+                <div className="p-3 md:p-4">
+                  <div className="inline-block bg-gray-200 text-gray-700 text-[10px] md:text-xs px-2 py-0.5 md:px-3 md:py-1 rounded mb-2 md:mb-3">
                     {event.acf?.category ?? "カテゴリなし"}
                   </div>
-                  <p className="text-sm text-gray-600 mb-2">
+                  <p className="text-xs md:text-sm text-gray-600 mb-1 md:mb-2">
                     {formatEventDate(event.acf?.event_date ?? event.date)}
                   </p>
-                  <h3 className="text-base leading-relaxed line-clamp-2">
+                  <h3 className="text-sm md:text-base leading-relaxed line-clamp-2">
                     {htmlToText(event.title?.rendered) || "タイトルなし"}
                   </h3>
                 </div>
@@ -518,7 +520,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-4xl mb-4">店舗を探す</h2>
-            <p className="text-xl text-gray-600">
+            <p className="text-lg text-gray-600">
               カテゴリから店舗を検索できます
             </p>
           </div>

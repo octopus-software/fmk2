@@ -17,13 +17,13 @@ export default function ScrollToHash() {
 
           window.scrollTo({
             top: offsetPosition,
-            behavior: "smooth"
+            behavior: "auto",
           });
         }, 100);
       }
     } else {
       // ハッシュがない場合はページトップへスクロール
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      window.scrollTo({ top: 0, behavior: "auto" });
     }
   }, [location]);
 
