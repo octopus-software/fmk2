@@ -42,22 +42,22 @@ export default function Contact() {
         </div>
       </div>
 
-      <h2 className="text-center mt-10 text-xl">
+      <h2 className="text-center mt-10 text-xs md:text-xl ">
         「フィールズ南柏」へのご意見、ご要望、お問い合わせ等ございましたら、お気軽に下記にご連絡ください。
       </h2>
 
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* 各店舗へのお問合せ */}
         <section className="bg-white rounded-lg shadow-lg overflow-hidden mb-8">
-          <div className="p-8 md:p-12">
+          <div className="p-4 md:p-12">
             <div className="flex items-center gap-3 mb-6">
               <Store className="w-6 h-6 text-blue-600" />
-              <h2 className="text-2xl text-gray-900">
+              <h2 className="text-sm md:text-2xl text-gray-900">
                 各店舗へのお問合せ
               </h2>
             </div>
-            <div className="bg-gray-50 p-6 rounded-lg">
-              <p className="text-lg text-gray-700">
+            <div className="bg-gray-50 p-3 md:p-6 rounded-lg">
+              <p className="text-xs text-gray-700">
                 各店舗へお願いいたします
               </p>
             </div>
@@ -66,23 +66,23 @@ export default function Contact() {
 
         {/* モールへのお問合せ・落とし物 */}
         <section className="bg-white rounded-lg shadow-lg overflow-hidden mb-8">
-          <div className="p-8 md:p-12">
+          <div className="p-4 md:p-12">
             <div className="flex items-center gap-3 mb-6">
               <HelpCircle className="w-6 h-6 text-green-600" />
-              <h2 className="text-2xl text-gray-900">
+              <h2 className="text-sm md:text-2xl text-gray-900">
                 モールへのお問合せ・落とし物
               </h2>
             </div>
-            <div className="bg-gray-50 p-6 rounded-lg">
+            <div className="bg-gray-50 p-3 md:p-6 rounded-lg">
               <div className="space-y-4">
                 <div>
-                  <p className="text-lg text-gray-900 font-medium mb-3">
+                  <p className="text-sm text-gray-900 font-medium mb-3">
                     モールⅡ管理室
                   </p>
                   <div className="flex items-center gap-3">
                     <Phone className="w-5 h-5 text-green-600" />
                     <div>
-                      <p className="text-xl text-gray-700">
+                      <p className="text-sm text-gray-700">
                         TEL: 04-7160-0900
                       </p>
                       <p className="text-sm text-gray-600 mt-1">
@@ -98,15 +98,15 @@ export default function Contact() {
 
         {/* 出店（店舗） */}
         <section className="bg-white rounded-lg shadow-lg overflow-hidden mb-8">
-          <div className="p-8 md:p-12">
+          <div className="p-4 md:p-12">
             <div className="flex items-center gap-3 mb-6">
               <Store className="w-6 h-6 text-purple-600" />
-              <h2 className="text-2xl text-gray-900">
+              <h2 className="text-sm md:text-2xl text-gray-900">
                 出店（店舗）
               </h2>
             </div>
-            <div className="bg-gray-50 p-6 rounded-lg">
-              <p className="text-lg text-gray-600">
+            <div className="bg-gray-50 p-3 md:p-6 rounded-lg">
+              <p className="text-xs text-gray-600">
                 ※現在募集しておりません
               </p>
             </div>
@@ -115,15 +115,15 @@ export default function Contact() {
 
         {/* 出店（催事キッチンカー） */}
         <section className="bg-white rounded-lg shadow-lg overflow-hidden mb-8">
-          <div className="p-8 md:p-12">
+          <div className="p-4 md:p-12">
             <div className="flex items-center gap-3 mb-6">
               <Truck className="w-6 h-6 text-orange-600" />
-              <h2 className="text-2xl text-gray-900">
+              <h2 className="text-sm md:text-2xl text-gray-900">
                 出店（催事キッチンカー）
               </h2>
             </div>
-            <div className="bg-gray-50 p-6 rounded-lg">
-              <p className="text-lg text-gray-600">
+            <div className="bg-gray-50 p-3 md:p-6 rounded-lg">
+              <p className="text-xs text-gray-600">
                 ※現在募集しておりません
               </p>
             </div>
