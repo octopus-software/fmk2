@@ -8,8 +8,21 @@ import {
   sortNewsByStartAtDesc,
 } from "@/features/news/api/fetchNews";
 import type { NewsApiItem } from "@/features/news/types/news";
-import { formatDate, toTime } from "@/features/news/utils/date";
+import { toTime } from "@/features/news/utils/date";
 import { htmlToText } from "@/features/news/utils/text";
+
+const formatNewsDetailDate = (value?: string) => {
+  if (!value) return "日付未設定";
+
+  const normalized = value.includes(" ") && !value.includes("T")
+    ? value.replace(" ", "T")
+    : value;
+  const date = new Date(normalized);
+  if (Number.isNaN(date.getTime())) return value;
+
+  const weekdays = ["日", "月", "火", "水", "木", "金", "土"];
+  return `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日 (${weekdays[date.getDay()]})`;
+};
 
 export default function NewsDetail() {
   const { id } = useParams();
@@ -125,11 +138,11 @@ export default function NewsDetail() {
   }
 
   return (
-    <div className="bg-gray-50 min-h-screen">
+    <div className="bg-gray-50 min-h-screen text-sm md:text-base">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Breadcrumb */}
         <nav className="mb-8">
-          <ol className="flex items-center gap-2 text-sm text-gray-600">
+          <ol className="flex items-center gap-2 text-xs md:text-sm text-gray-600">
             <li>
               <Link to="/" className="hover:text-blue-600 transition-colors">
                 ホーム
@@ -147,20 +160,20 @@ export default function NewsDetail() {
         </nav>
 
         {/* Article */}
-        <article className="bg-white rounded-lg shadow-lg p-8 md:p-12">
+        <article className="bg-white rounded-lg shadow-lg p-6 md:p-12">
           {/* Meta Info */}
-          <div className="flex flex-wrap items-center gap-4 mb-6 pb-6 border-b border-gray-200">
-            <div className="flex items-center gap-2 text-gray-600">
-              <Calendar className="w-4 h-4" />
-              <time className="text-sm">{formatDate(newsItem.acf?.start_at ?? newsItem.date)}</time>
-            </div>
-            <span className="bg-blue-500 text-white text-xs px-4 py-1 rounded-full">
+          <div className="flex flex-col items-start gap-2 mb-6 pb-6 border-b border-gray-200 md:flex-row md:flex-wrap md:items-center md:gap-4">
+            <span className="bg-blue-500 text-white text-[11px] md:text-xs px-4 py-1 rounded-full">
               {newsItem.acf?.category ?? "カテゴリなし"}
             </span>
+            <div className="flex items-center gap-2 text-gray-600">
+              <Calendar className="w-4 h-4" />
+              <time className="text-xs md:text-sm">{formatNewsDetailDate(newsItem.acf?.start_at ?? newsItem.date)}</time>
+            </div>
           </div>
 
           {/* Title */}
-          <h1 className="text-xl md:text-2xl mb-8 text-gray-900 leading-relaxed">
+          <h1 className="text-lg md:text-2xl mb-8 text-gray-900 leading-relaxed">
             {htmlToText(newsItem.title?.rendered) || "タイトルなし"}
           </h1>
 
@@ -189,7 +202,7 @@ export default function NewsDetail() {
         {/* Related News */}
         {relatedItems.length > 0 && (
           <div className="mt-12">
-            <h2 className="text-2xl mb-6 text-gray-900">その他のお知らせ</h2>
+            <h2 className="text-xl md:text-2xl mb-6 text-gray-900">その他のお知らせ</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {relatedItems.map((item) => (
                 <Link
@@ -197,15 +210,15 @@ export default function NewsDetail() {
                   to={`/news/${item.id}`}
                   className="bg-white rounded-lg shadow hover:shadow-lg transition-shadow p-6"
                 >
-                  <div className="flex items-center gap-3 mb-3">
-                    <time className="text-sm text-gray-600">
-                      {formatDate(item.acf?.start_at ?? item.date)}
-                    </time>
-                    <span className="bg-blue-500 text-white text-xs px-3 py-1 rounded-full">
+                  <div className="flex flex-col items-start gap-2 mb-3 md:flex-row md:items-center md:gap-3">
+                    <span className="bg-blue-500 text-white text-[11px] md:text-xs px-3 py-1 rounded-full">
                       {item.acf?.category ?? "カテゴリなし"}
                     </span>
+                    <time className="text-xs md:text-sm text-gray-600">
+                      {formatNewsDetailDate(item.acf?.start_at ?? item.date)}
+                    </time>
                   </div>
-                  <h3 className="text-base text-gray-900 hover:text-blue-600 transition-colors line-clamp-2">
+                  <h3 className="text-sm md:text-base text-gray-900 hover:text-blue-600 transition-colors line-clamp-2">
                     {htmlToText(item.title?.rendered) || "タイトルなし"}
                   </h3>
                 </Link>
