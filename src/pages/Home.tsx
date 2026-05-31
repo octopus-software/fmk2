@@ -266,11 +266,11 @@ export default function Home() {
                   <p className="mt-8">フィールズ南柏へ</p>
                 </h1>
                 <div className="px-6 py-5 my-4 bg-white/85 rounded-lg ">
-                  <p className="text-xl text-gray-700 leading-relaxed mb-6 mt-10">
+                  <p className="text-base md:text-xl text-gray-700 leading-relaxed mb-6 mt-10">
                     地域密着型のショッピングモールとして、
                     皆様の日常に彩りを添える様々なショップとサービスをご用意しております。
                   </p>
-                  <p className="text-lg text-gray-700 leading-relaxed mb-8">
+                  <p className="text-sm md:text-lg text-gray-700 leading-relaxed mb-8">
                     ファッション、グルメ、日用品から
                     エンターテインメントまで、
                     <br />
@@ -280,7 +280,7 @@ export default function Home() {
                 <div>
                   <Link
                     to="/about"
-                    className="inline-block bg-blue-500/80 hover:bg-blue-600/90 text-white px-8 py-3 rounded-lg text-lg transition-all shadow-lg backdrop-blur-sm"
+                    className="inline-block bg-orange-500/80 hover:bg-orange-600/90 text-white px-8 py-3 rounded-lg text-lg transition-all shadow-lg backdrop-blur-sm"
                   >
                     フィールズ南柏とは
                   </Link>
@@ -534,13 +534,13 @@ export default function Home() {
                   onClick={() =>
                     setSelectedCategory(category.id)
                   }
-                  className={`flex items-center gap-2 px-6 py-3 rounded-full transition-all ${
+                  className={`flex items-center gap-1 md:gap-2 px-3 md:px-6 py-1.5 md:py-3 rounded-full text-xs md:text-base transition-all ${
                     selectedCategory === category.id
                       ? "bg-blue-600 text-white shadow-lg scale-105"
                       : "bg-white text-gray-700 hover:bg-gray-100"
                   }`}
                 >
-                  <Icon className="w-5 h-5" />
+                  <Icon className="w-3.5 h-3.5 md:w-5 md:h-5" />
                   <span>{category.name}</span>
                 </button>
               );
