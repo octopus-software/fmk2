@@ -12,7 +12,7 @@ import {
   isEventNew,
 } from "@/features/events/utils/events";
 import type { EventApiItem } from "@/features/events/types/events";
-import { htmlToText, truncateText } from "@/features/news/utils/text";
+import { htmlToText } from "@/features/news/utils/text";
 
 const parsePublishStartAt = (value?: string) => {
   if (!value) return null;
@@ -153,11 +153,11 @@ export default function EventDetail() {
   const displayTime = timeRange || fallbackTime;
 
   return (
-    <div className="bg-gray-50 min-h-screen">
+    <div className="bg-gray-50 min-h-screen text-sm md:text-base">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Breadcrumb */}
         <nav className="mb-8">
-          <ol className="flex items-center gap-2 text-sm text-gray-600">
+          <ol className="flex items-center gap-2 text-xs md:text-sm text-gray-600">
             <li>
               <Link to="/" className="hover:text-purple-600 transition-colors">
                 ホーム
@@ -178,7 +178,7 @@ export default function EventDetail() {
         <div className="bg-white rounded-lg shadow-lg overflow-hidden mb-8">
           <div className="relative h-64 md:h-96">
             {isEventNew(eventItem.acf?.publish_start_at ?? eventItem.date) && (
-              <div className="absolute top-4 left-4 bg-red-600 text-white text-sm px-4 py-2 rounded z-10">
+              <div className="absolute top-4 left-4 bg-red-600 text-white text-xs md:text-sm px-3 md:px-4 py-1.5 md:py-2 rounded z-10">
                 NEW
               </div>
             )}
@@ -192,13 +192,13 @@ export default function EventDetail() {
           <div className="p-8 md:p-12">
             {/* Category */}
             <div className="mb-4">
-              <span className="inline-block bg-purple-100 text-purple-700 text-sm px-4 py-2 rounded-full">
+              <span className="inline-block bg-purple-100 text-purple-700 text-xs md:text-sm px-4 py-2 rounded-full">
                 {eventItem.acf?.category ?? "カテゴリなし"}
               </span>
             </div>
 
             {/* Title */}
-            <h1 className="text-3xl md:text-4xl mb-6 text-gray-900 leading-relaxed">
+            <h1 className="text-lg md:text-4xl mb-6 text-gray-900 leading-relaxed">
               {htmlToText(eventItem.title?.rendered) || "タイトルなし"}
             </h1>
 
@@ -207,7 +207,7 @@ export default function EventDetail() {
               <div className="flex items-start gap-3">
                 <Calendar className="w-5 h-5 text-purple-600 mt-1 flex-shrink-0" />
                 <div>
-                  <div className="text-sm text-gray-500 mb-1">開催日</div>
+                  <div className="text-xs md:text-sm text-gray-500 mb-1">開催日</div>
                   <div className="text-gray-900">
                     {formatEventDate(getEventDisplayDateValue(eventItem))}
                   </div>
@@ -218,7 +218,7 @@ export default function EventDetail() {
                 <div className="flex items-start gap-3">
                   <Clock className="w-5 h-5 text-purple-600 mt-1 flex-shrink-0" />
                   <div>
-                    <div className="text-sm text-gray-500 mb-1">時間</div>
+                    <div className="text-xs md:text-sm text-gray-500 mb-1">時間</div>
                     <div className="text-gray-900">{displayTime}</div>
                   </div>
                 </div>
@@ -228,7 +228,7 @@ export default function EventDetail() {
                 <div className="flex items-start gap-3">
                   <MapPin className="w-5 h-5 text-purple-600 mt-1 flex-shrink-0" />
                   <div>
-                    <div className="text-sm text-gray-500 mb-1">場所</div>
+                    <div className="text-xs md:text-sm text-gray-500 mb-1">場所</div>
                     <div className="text-gray-900">{eventItem.acf.place}</div>
                   </div>
                 </div>
@@ -238,7 +238,7 @@ export default function EventDetail() {
                 <div className="flex items-start gap-3">
                   <Users className="w-5 h-5 text-purple-600 mt-1 flex-shrink-0" />
                   <div>
-                    <div className="text-sm text-gray-500 mb-1">定員</div>
+                    <div className="text-xs md:text-sm text-gray-500 mb-1">定員</div>
                     <div className="text-gray-900">{eventItem.acf.capacity}</div>
                   </div>
                 </div>
@@ -248,16 +248,16 @@ export default function EventDetail() {
                 <div className="flex items-start gap-3">
                   <DollarSign className="w-5 h-5 text-purple-600 mt-1 flex-shrink-0" />
                   <div>
-                    <div className="text-sm text-gray-500 mb-1">参加費</div>
+                    <div className="text-xs md:text-sm text-gray-500 mb-1">参加費</div>
                     <div className="text-gray-900">{eventItem.acf.price}</div>
                   </div>
                 </div>
               )}
             </div>
-            
+
             {/* Full Content */}
             {eventItem.content?.rendered && (
-              <div className="prose prose-lg max-w-none wp-content">
+              <div className="prose prose-base md:prose-lg max-w-none wp-content">
                 <div dangerouslySetInnerHTML={{ __html: eventItem.content.rendered }} />
               </div>
             )}
@@ -278,7 +278,7 @@ export default function EventDetail() {
         {/* Related Events */}
         {relatedItems.length > 0 && (
           <div className="mt-12">
-            <h2 className="text-2xl mb-6 text-gray-900">その他のイベント</h2>
+            <h2 className="text-xl md:text-2xl mb-6 text-gray-900">その他のイベント</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {relatedItems.map((item) => (
                 <Link
@@ -288,7 +288,7 @@ export default function EventDetail() {
                 >
                   <div className="relative">
                     {isEventNew(item.acf?.publish_start_at ?? item.date) && (
-                      <div className="absolute top-2 left-2 bg-red-600 text-white text-xs px-2 py-1 rounded z-10">
+                      <div className="absolute top-2 left-2 bg-red-600 text-white text-[10px] md:text-xs px-2 py-1 rounded z-10">
                         NEW
                       </div>
                     )}
@@ -298,14 +298,14 @@ export default function EventDetail() {
                       className="w-full aspect-square object-cover"
                     />
                   </div>
-                  <div className="p-4">
-                    <div className="inline-block bg-gray-200 text-gray-700 text-xs px-3 py-1 rounded mb-2">
+                  <div className="p-3 md:p-4">
+                    <div className="inline-block bg-gray-200 text-gray-700 text-[11px] md:text-xs px-3 py-1 rounded mb-2">
                       {item.acf?.category ?? "カテゴリなし"}
                     </div>
-                    <p className="text-sm text-gray-600 mb-2">
+                    <p className="text-xs md:text-sm text-gray-600 mb-2">
                       {formatEventDate(getEventDisplayDateValue(item))}
                     </p>
-                    <h3 className="text-base hover:text-purple-600 transition-colors line-clamp-2">
+                    <h3 className="text-sm md:text-base hover:text-purple-600 transition-colors line-clamp-2">
                       {htmlToText(item.title?.rendered) || "タイトルなし"}
                     </h3>
                   </div>
