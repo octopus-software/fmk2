@@ -91,7 +91,7 @@ export default function FloorGuide() {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-12">
         {floors.map((floor) => {
           const shops = getShopsByFloor(floor.id);
 
@@ -102,17 +102,17 @@ export default function FloorGuide() {
               className="bg-white rounded-lg shadow-lg overflow-hidden mb-8"
             >
               {/* Floor Header */}
-              <div className="bg-gray-100 p-6 border-b border-gray-200">
-                <div className="flex items-center gap-4">
+              <div className="bg-gray-100 p-3 md:p-6 border-b border-gray-200">
+                <div className="flex flex-col items-start gap-3 md:flex-row md:items-center md:gap-4">
                   <div
                     className={`${floor.color} px-6 py-3 rounded-lg`}
                   >
-                    <span className="text-2xl font-bold">
+                    <span className="text-lg md:text-xl font-bold">
                       {floor.name}
                     </span>
                   </div>
                   <div>
-                    <h2 className="text-2xl text-gray-900">
+                    <h2 className="text-lg md:text-xl text-gray-900">
                       {floor.description}
                     </h2>
                     <p className="text-sm text-gray-600 mt-1">
@@ -123,7 +123,7 @@ export default function FloorGuide() {
               </div>
 
               {/* Floor Map Image */}
-              <div className="p-6 bg-gray-50">
+              <div className="p-3 md:p-6 bg-gray-50">
                 <div className="bg-gray-200 rounded-lg flex items-center justify-center h-64">
                   <div className="text-center">
                     <Building2 className="w-16 h-16 text-gray-400 mx-auto mb-2" />
@@ -139,7 +139,7 @@ export default function FloorGuide() {
 
               {/* Shop List Table */}
               {shops.length > 0 ? (
-                <div className="p-4 md:p-6">
+                <div className="p-2 md:p-6">
                   {/* PC用テーブル */}
                   <div className="hidden md:block overflow-x-auto">
                     <table className="w-full">
@@ -190,46 +190,33 @@ export default function FloorGuide() {
                     </table>
                   </div>
 
-                  {/* スマホ用カード */}
-                  <div className="md:hidden space-y-4">
+                  {/* スマホ用リスト */}
+                  <div className="md:hidden divide-y divide-gray-200">
                     {shops.map((shop) => (
-                      <div
-                        key={shop.id}
-                        className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm"
-                      >
+                      <div key={shop.id} className="py-3">
                         <Link
                           to={`/shops/${shop.id}`}
-                          className="text-lg font-bold text-blue-600 hover:text-blue-700"
+                          className="text-base font-semibold text-blue-600 hover:text-blue-700"
                         >
                           {shop.name}
                         </Link>
 
-                        <div className="mt-4 space-y-3 text-sm">
+                        <div className="mt-2 space-y-2 text-sm">
                           <div>
-                            <p className="text-xs text-gray-500 mb-1">
-                              カテゴリ
-                            </p>
+                            <p className="text-xs text-gray-500 mb-1">カテゴリ</p>
                             <span className="inline-block bg-gray-100 text-gray-700 text-xs px-3 py-1 rounded-full">
                               {getCategoryName(shop.category)}
                             </span>
                           </div>
 
                           <div>
-                            <p className="text-xs text-gray-500 mb-1">
-                              電話番号
-                            </p>
-                            <p className="text-gray-700">
-                              {shop.phone}
-                            </p>
+                            <p className="text-xs text-gray-500 mb-1">電話番号</p>
+                            <p className="text-gray-700">{shop.phone}</p>
                           </div>
 
                           <div>
-                            <p className="text-xs text-gray-500 mb-1">
-                              営業時間
-                            </p>
-                            <p className="text-gray-700 leading-relaxed">
-                              {shop.hours}
-                            </p>
+                            <p className="text-xs text-gray-500 mb-1">営業時間</p>
+                            <p className="text-gray-700 leading-relaxed">{shop.hours}</p>
                           </div>
                         </div>
                       </div>
@@ -237,7 +224,7 @@ export default function FloorGuide() {
                   </div>
                 </div>
               ) : (
-                <div className="p-6 text-center text-gray-500">
+                <div className="p-3 md:p-6 text-center text-gray-500">
                   このフロアには店舗がありません
                 </div>
               )}
