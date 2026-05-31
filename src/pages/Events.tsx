@@ -3,7 +3,13 @@ import { useEffect, useMemo, useState } from "react";
 import { ImageWithFallback } from "../components/figma/ImageWithFallback";
 import { fetchEvents } from "@/features/events/api/fetchEvents";
 import { EVENTS_PAGE_SIZE } from "@/features/events/constants/events";
-import { formatEventDate, getEventImageUrl, isEventNew } from "@/features/events/utils/events";
+import {
+  formatEventDate,
+  getEventDisplayDateValue,
+  getEventImageUrl,
+  getEventSortTime,
+  isEventNew,
+} from "@/features/events/utils/events";
 import type { EventApiItem } from "@/features/events/types/events";
 import { htmlToText, truncateText } from "@/features/news/utils/text";
 
@@ -24,16 +30,6 @@ const parsePublishDate = (value?: string, now = new Date()) => {
       : value;
   const date = new Date(normalized);
   return Number.isNaN(date.getTime()) ? null : date;
-};
-
-const getEventDateSortValue = (event: EventApiItem) => {
-  const raw = event.acf?.event_date;
-  if (raw && /^\d{8}$/.test(raw)) {
-    return Number(raw);
-  }
-
-  const fallback = event.date ? new Date(event.date).getTime() : Number.NEGATIVE_INFINITY;
-  return Number.isNaN(fallback) ? Number.NEGATIVE_INFINITY : fallback;
 };
 
 const isVisibleNow = (event: EventApiItem, now: Date) => {
@@ -99,7 +95,7 @@ export default function Events() {
         const now = new Date();
         const visibleItems = items
           .filter((event) => isVisibleNow(event, now))
-          .sort((a, b) => getEventDateSortValue(b) - getEventDateSortValue(a));
+          .sort((a, b) => getEventSortTime(b) - getEventSortTime(a));
 
         if (!cancelled) {
           setEvents(visibleItems);
@@ -205,7 +201,7 @@ export default function Events() {
                           {event.acf?.category ?? "カテゴリなし"}
                         </div>
                         <p className="text-xs md:text-sm text-gray-600 mb-1 md:mb-2">
-                          {formatEventDate(event.acf?.event_date ?? event.date)}
+                          {formatEventDate(getEventDisplayDateValue(event))}
                         </p>
                         <h3 className="text-sm md:text-base leading-relaxed mb-1 md:mb-2 line-clamp-2 hover:text-purple-600 transition-colors">
                           {htmlToText(event.title?.rendered) || "タイトルなし"}
@@ -233,32 +229,27 @@ export default function Events() {
                 </button>
 
                 {pagerItems.map((item, index) => {
-                  if (item === "...") {
+                  if (typeof item === "number") {
                     return (
-                      <span
-                        key={`ellipsis-${index}`}
-                        className="px-2 text-sm text-gray-500"
+                      <button
+                        key={item}
+                        type="button"
+                        onClick={() => onPageChange(item)}
+                        className={`px-4 py-2 rounded text-sm cursor-pointer transition-all ${
+                          item === currentPage
+                            ? "bg-purple-600 text-white shadow-md"
+                            : "bg-white text-purple-600 hover:bg-purple-50"
+                        }`}
                       >
-                        ...
-                      </span>
+                        {item}
+                      </button>
                     );
                   }
 
-                  const isActive = item === currentPage;
                   return (
-                    <button
-                      key={item}
-                      type="button"
-                      onClick={() => onPageChange(item)}
-                      className={`min-w-9 px-3 py-2 rounded border text-sm cursor-pointer ${
-                        isActive
-                          ? "border-purple-600 bg-purple-600 text-white"
-                          : "border-gray-300 text-gray-700 hover:bg-gray-100"
-                      }`}
-                      aria-current={isActive ? "page" : undefined}
-                    >
+                    <span key={index} className="text-gray-400">
                       {item}
-                    </button>
+                    </span>
                   );
                 })}
 

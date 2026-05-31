@@ -16,15 +16,36 @@ const parseYmd = (value: string) => {
   return Number.isNaN(date.getTime()) ? null : date;
 };
 
+const parseDotDate = (value: string) => {
+  const match = value.match(/(\d{4})\.(\d{2})\.(\d{2})/);
+  if (!match) return null;
+
+  const [, y, m, d] = match;
+  const date = new Date(Number(y), Number(m) - 1, Number(d));
+  return Number.isNaN(date.getTime()) ? null : date;
+};
+
+export const getEventDisplayDateValue = (item: EventApiItem) => {
+  return item.acf?.event_datetime ?? item.acf?.event_date ?? item.date;
+};
+
+export const getEventSortTime = (item: EventApiItem) => {
+  const raw = getEventDisplayDateValue(item);
+  if (!raw) return Number.NEGATIVE_INFINITY;
+
+  const ymdDate = parseYmd(raw);
+  if (ymdDate) return ymdDate.getTime();
+
+  const dotDate = parseDotDate(raw);
+  if (dotDate) return dotDate.getTime();
+
+  const date = new Date(normalizeWpDate(raw));
+  const time = date.getTime();
+  return Number.isNaN(time) ? Number.NEGATIVE_INFINITY : time;
+};
+
 export const formatEventDate = (value?: string) => {
-  if (!value) return "日付未設定";
-
-  const ymdDate = parseYmd(value);
-  if (ymdDate) return ymdDate.toLocaleDateString("ja-JP");
-
-  const date = new Date(normalizeWpDate(value));
-  if (Number.isNaN(date.getTime())) return value;
-  return date.toLocaleDateString("ja-JP");
+  return value && value.trim() ? value : "日付未設定";
 };
 
 export const formatEventTime = (value?: string) => {
@@ -58,10 +79,10 @@ export const getEventImageUrl = (item: EventApiItem) => {
   if (!media) return "";
 
   return (
-    media.media_details?.sizes?.medium?.source_url ??
-    media.media_details?.sizes?.large?.source_url ??
     media.media_details?.sizes?.full?.source_url ??
+    media.media_details?.sizes?.large?.source_url ??
     media.source_url ??
+    media.media_details?.sizes?.medium?.source_url ??
     ""
   );
 };

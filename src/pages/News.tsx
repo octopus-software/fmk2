@@ -11,8 +11,20 @@ import {
   NEWS_PREVIEW_MAX_CHARS,
 } from "@/features/news/constants/news";
 import type { NewsApiItem } from "@/features/news/types/news";
-import { formatDate } from "@/features/news/utils/date";
 import { htmlToText, truncateText } from "@/features/news/utils/text";
+
+const formatNewsListDate = (value?: string) => {
+  if (!value) return "日付未設定";
+
+  const normalized = value.includes(" ") && !value.includes("T")
+    ? value.replace(" ", "T")
+    : value;
+  const date = new Date(normalized);
+  if (Number.isNaN(date.getTime())) return value;
+
+  const weekdays = ["日", "月", "火", "水", "木", "金", "土"];
+  return `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日 (${weekdays[date.getDay()]})`;
+};
 
 export default function News() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -186,30 +198,26 @@ export default function News() {
                     className="block"
                   >
                     <article className="bg-white rounded-lg shadow hover:shadow-lg transition-shadow p-6">
-                      <div className="flex flex-col md:flex-row md:items-start gap-4">
-                        <div className="flex items-center gap-3 md:flex-col md:items-start md:min-w-[120px]">
-                          <div className="flex items-center gap-2 text-gray-600">
-                            <Calendar className="w-4 h-4" />
-                            <time className="text-sm">
-                              {formatDate(news.acf?.start_at ?? news.date)}
-                            </time>
-                          </div>
-                          <span className="bg-blue-500 text-white text-xs px-4 py-1 rounded-full whitespace-nowrap">
-                            {news.acf?.category ?? "カテゴリなし"}
-                          </span>
-                        </div>
-                        <div className="flex-1">
-                          <h2 className="text-xl mb-3 text-gray-900 hover:text-blue-600 transition-colors">
-                            {news.title?.rendered ?? "タイトルなし"}
-                          </h2>
-                          <p className="text-gray-700 leading-relaxed line-clamp-3">
-                            {truncateText(
-                              htmlToText(news.content?.rendered) || "本文なし",
-                              NEWS_PREVIEW_MAX_CHARS,
-                            )}
-                          </p>
+                      <div className="flex flex-wrap items-center gap-3 text-gray-600 mb-3">
+                        <span className="bg-blue-500 text-white text-xs px-4 py-1 rounded-full whitespace-nowrap">
+                          {news.acf?.category ?? "カテゴリなし"}
+                        </span>
+                        <div className="flex items-center gap-2">
+                          <Calendar className="w-4 h-4" />
+                          <time className="text-sm">
+                            {formatNewsListDate(news.acf?.start_at ?? news.date)}
+                          </time>
                         </div>
                       </div>
+                      <h2 className="text-xl mb-3 text-gray-900 hover:text-blue-600 transition-colors">
+                        {news.title?.rendered ?? "タイトルなし"}
+                      </h2>
+                      <p className="text-gray-700 leading-relaxed line-clamp-3">
+                        {truncateText(
+                          htmlToText(news.content?.rendered) || "本文なし",
+                          NEWS_PREVIEW_MAX_CHARS,
+                        )}
+                      </p>
                     </article>
                   </Link>
                 ))}

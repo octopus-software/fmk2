@@ -7,6 +7,7 @@ import {
   formatEventDate,
   formatEventTime,
   formatEventTimeRange,
+  getEventDisplayDateValue,
   getEventImageUrl,
   isEventNew,
 } from "@/features/events/utils/events";
@@ -208,7 +209,7 @@ export default function EventDetail() {
                 <div>
                   <div className="text-sm text-gray-500 mb-1">開催日</div>
                   <div className="text-gray-900">
-                    {formatEventDate(eventItem.acf?.event_date ?? eventItem.date)}
+                    {formatEventDate(getEventDisplayDateValue(eventItem))}
                   </div>
                 </div>
               </div>
@@ -253,18 +254,7 @@ export default function EventDetail() {
                 </div>
               )}
             </div>
-
-            {/* Description */}
-            <div className="mb-6">
-              <h2 className="text-xl mb-3 text-gray-900">イベント概要</h2>
-              <p className="text-gray-700 leading-relaxed">
-                {truncateText(
-                  htmlToText(eventItem.content?.rendered) || "イベント詳細は準備中です",
-                  160,
-                )}
-              </p>
-            </div>
-
+            
             {/* Full Content */}
             {eventItem.content?.rendered && (
               <div className="prose prose-lg max-w-none wp-content">
@@ -313,7 +303,7 @@ export default function EventDetail() {
                       {item.acf?.category ?? "カテゴリなし"}
                     </div>
                     <p className="text-sm text-gray-600 mb-2">
-                      {formatEventDate(item.acf?.event_date ?? item.date)}
+                      {formatEventDate(getEventDisplayDateValue(item))}
                     </p>
                     <h3 className="text-base hover:text-purple-600 transition-colors line-clamp-2">
                       {htmlToText(item.title?.rendered) || "タイトルなし"}

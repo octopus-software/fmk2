@@ -17,7 +17,13 @@ import type { PickupApiItem } from "@/features/pickups/types/pickups";
 import { getPickupImageUrl, isPickupVisibleNow } from "@/features/pickups/utils/pickups";
 import { fetchEvents } from "@/features/events/api/fetchEvents";
 import type { EventApiItem } from "@/features/events/types/events";
-import { formatEventDate, getEventImageUrl, isEventNew } from "@/features/events/utils/events";
+import {
+  formatEventDate,
+  getEventDisplayDateValue,
+  getEventImageUrl,
+  getEventSortTime,
+  isEventNew,
+} from "@/features/events/utils/events";
 import { htmlToText } from "@/features/news/utils/text";
 
 type NewsApiItem = {
@@ -44,7 +50,10 @@ const parseApiDate = (value?: string) => {
 
 const formatApiDate = (value?: string) => {
   const date = parseApiDate(value);
-  return date ? date.toLocaleDateString("ja-JP") : "日付未設定";
+  if (!date) return "日付未設定";
+
+  const weekdays = ["日", "月", "火", "水", "木", "金", "土"];
+  return `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日 (${weekdays[date.getDay()]})`;
 };
 
 const isNewsVisibleNow = (news: NewsApiItem, now: Date) => {
@@ -82,16 +91,6 @@ const isEventVisibleNow = (event: EventApiItem, now: Date) => {
   if (start && now < start) return false;
   if (end && now > end) return false;
   return true;
-};
-
-const getEventDateSortValue = (event: EventApiItem) => {
-  const raw = event.acf?.event_date;
-  if (raw && /^\d{8}$/.test(raw)) {
-    return Number(raw);
-  }
-
-  const fallback = parseApiDate(event.date)?.getTime();
-  return fallback ?? Number.NEGATIVE_INFINITY;
 };
 
 export default function Home() {
@@ -203,7 +202,7 @@ export default function Home() {
         setEventsApiItems(
           items
             .filter((event) => isEventVisibleNow(event, now))
-            .sort((a, b) => getEventDateSortValue(b) - getEventDateSortValue(a)),
+            .sort((a, b) => getEventSortTime(b) - getEventSortTime(a)),
         );
         setEventsApiError(null);
       })
@@ -489,7 +488,7 @@ export default function Home() {
                     {event.acf?.category ?? "カテゴリなし"}
                   </div>
                   <p className="text-xs md:text-sm text-gray-600 mb-1 md:mb-2">
-                    {formatEventDate(event.acf?.event_date ?? event.date)}
+                    {formatEventDate(getEventDisplayDateValue(event))}
                   </p>
                   <h3 className="text-sm md:text-base leading-relaxed line-clamp-2">
                     {htmlToText(event.title?.rendered) || "タイトルなし"}

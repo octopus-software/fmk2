@@ -7,13 +7,7 @@ export type EventApiItem = {
     publish_start_at?: string;
     publish_end_at?: string;
     category?: string;
-    event_date?: string;
-    event_time?: string;
-    event_start_at?: string;
-    event_end_at?: string;
-    event_start_time?: string;
-    event_end_time?: string;
-    place?: string;
+    event_datetime?: string;
     capacity?: string;
     price?: string;
   };
