@@ -46,11 +46,11 @@ export default function ShopDetail() {
   };
 
   return (
-    <div className="bg-gray-50 min-h-screen">
+    <div className="bg-gray-50 min-h-screen text-sm md:text-base">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Breadcrumb */}
         <nav className="mb-8">
-          <ol className="flex items-center gap-2 text-sm text-gray-600">
+          <ol className="flex items-center gap-2 text-xs md:text-sm text-gray-600">
             <li>
               <Link to="/" className="hover:text-blue-600 transition-colors">
                 ホーム
@@ -76,7 +76,7 @@ export default function ShopDetail() {
               className="w-full h-full object-cover"
             />
             <div className="absolute top-4 left-4">
-              <span className={`${getFloorColor(shop.floor)} px-4 py-2 rounded-lg text-lg font-bold`}>
+              <span className={`${getFloorColor(shop.floor)} px-4 py-2 rounded-lg text-base md:text-lg font-bold`}>
                 {shop.floor}
               </span>
             </div>
@@ -85,25 +85,25 @@ export default function ShopDetail() {
           <div className="p-8 md:p-12">
             {/* Category */}
             <div className="mb-4">
-              <span className="inline-flex items-center gap-2 bg-gray-100 text-gray-700 text-sm px-4 py-2 rounded-full">
+              <span className="inline-flex items-center gap-2 bg-gray-100 text-gray-700 text-xs md:text-sm px-4 py-2 rounded-full">
                 <Tag className="w-4 h-4" />
                 {getCategoryName(shop.category)}
               </span>
             </div>
 
             {/* Shop Name */}
-            <h1 className="text-4xl md:text-5xl mb-4 text-gray-900">
+            <h1 className="text-xl md:text-5xl mb-4 text-gray-900">
               {shop.name}
             </h1>
 
-            <p className="text-xl text-gray-600 mb-8">{shop.description}</p>
+            <p className="text-sm md:text-xl text-gray-600 mb-8">{shop.description}</p>
 
             {/* Shop Info */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8 pb-8 border-b border-gray-200">
               <div className="flex items-start gap-3">
                 <MapPin className="w-5 h-5 text-blue-600 mt-1 flex-shrink-0" />
                 <div>
-                  <div className="text-sm text-gray-500 mb-1">フロア</div>
+                  <div className="text-xs md:text-sm text-gray-500 mb-1">フロア</div>
                   <div className="text-gray-900">{shop.floor}</div>
                 </div>
               </div>
@@ -112,7 +112,7 @@ export default function ShopDetail() {
                 <div className="flex items-start gap-3">
                   <Clock className="w-5 h-5 text-blue-600 mt-1 flex-shrink-0" />
                   <div>
-                    <div className="text-sm text-gray-500 mb-1">営業時間</div>
+                    <div className="text-xs md:text-sm text-gray-500 mb-1">営業時間</div>
                     <div className="text-gray-900">{shop.hours}</div>
                   </div>
                 </div>
@@ -122,7 +122,7 @@ export default function ShopDetail() {
                 <div className="flex items-start gap-3">
                   <Phone className="w-5 h-5 text-blue-600 mt-1 flex-shrink-0" />
                   <div>
-                    <div className="text-sm text-gray-500 mb-1">電話番号</div>
+                    <div className="text-xs md:text-sm text-gray-500 mb-1">電話番号</div>
                     <div className="text-gray-900">{shop.phone}</div>
                   </div>
                 </div>
@@ -132,7 +132,7 @@ export default function ShopDetail() {
                 <div className="flex items-start gap-3">
                   <Globe className="w-5 h-5 text-blue-600 mt-1 flex-shrink-0" />
                   <div>
-                    <div className="text-sm text-gray-500 mb-1">ウェブサイト</div>
+                    <div className="text-xs md:text-sm text-gray-500 mb-1">ウェブサイト</div>
                     <a
                       href={shop.website}
                       target="_blank"
@@ -149,7 +149,7 @@ export default function ShopDetail() {
             {/* Full Description */}
             {shop.fullDescription && (
               <div className="prose prose-lg max-w-none">
-                <h2 className="text-2xl mb-4 text-gray-900">店舗詳細</h2>
+                <h2 className="text-xl md:text-2xl mb-4 text-gray-900">店舗詳細</h2>
                 <div className="text-gray-700 leading-relaxed whitespace-pre-line">
                   {shop.fullDescription}
                 </div>
@@ -171,7 +171,7 @@ export default function ShopDetail() {
 
         {/* Related Shops */}
         <div className="mt-12">
-          <h2 className="text-2xl mb-6 text-gray-900">同じフロアの店舗</h2>
+          <h2 className="text-xl md:text-2xl mb-6 text-gray-900">同じフロアの店舗</h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {shopsItems
               .filter((item) => item.floor === shop.floor && item.id !== shop.id)
@@ -190,10 +190,10 @@ export default function ShopDetail() {
                     />
                   </div>
                   <div className="p-3">
-                    <h3 className="text-sm font-medium mb-1 hover:text-blue-600 transition-colors">
+                    <h3 className="text-xs md:text-sm font-medium mb-1 hover:text-blue-600 transition-colors">
                       {item.name}
                     </h3>
-                    <p className="text-xs text-gray-500">{item.description}</p>
+                    <p className="text-[11px] md:text-xs text-gray-500">{item.description}</p>
                   </div>
                 </Link>
               ))}
