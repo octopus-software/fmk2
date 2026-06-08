@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import ScrollToHash from "./ScrollToHash";
 import logoImage from "../assets/images/fmk2_logo.jpg";
+import logoImageWhite from "../assets/images/fmk2_logo_w.png";
 
 export default function Root() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -147,7 +148,7 @@ export default function Root() {
           <div className="grid grid-cols-1 md:grid-cols-[3fr_3fr_2fr_2fr] gap-8 mb-8">
             <div>
               <div className="flex items-center gap-2 mb-4">
-                <img src={logoImage} alt="フィールズ南柏モール2" className="h-10" />
+                <img src={logoImageWhite} alt="フィールズ南柏モール2" className="h-10" />
                 <span className="font-bold text-lg">
                   フィールズ南柏モール2
                 </span>
