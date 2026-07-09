@@ -27,6 +27,7 @@ import {
 import { htmlToText } from "@/features/news/utils/text";
 import { fetchSns } from "@/features/sns/api/fetchSns";
 import type { SnsApiItem } from "@/features/sns/types/sns";
+import { parseWpDate, parseWpDateOrTime, formatJpDate } from "@/lib/date";
 
 type NewsApiItem = {
   id: number;
@@ -40,55 +41,18 @@ type NewsApiItem = {
   end_at?: string;
 };
 
-const parseApiDate = (value?: string) => {
-  if (!value) return null;
-  const normalized =
-    value.includes(" ") && !value.includes("T")
-      ? value.replace(" ", "T")
-      : value;
-  const date = new Date(normalized);
-  return Number.isNaN(date.getTime()) ? null : date;
-};
-
-const formatApiDate = (value?: string) => {
-  const date = parseApiDate(value);
-  if (!date) return "日付未設定";
-
-  const weekdays = ["日", "月", "火", "水", "木", "金", "土"];
-  return `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日 (${weekdays[date.getDay()]})`;
-};
-
 const isNewsVisibleNow = (news: NewsApiItem, now: Date) => {
-  const start = parseApiDate(news.acf?.start_at ?? news.start_at);
-  const end = parseApiDate(news.acf?.end_at ?? news.end_at);
+  const start = parseWpDate(news.acf?.start_at ?? news.start_at);
+  const end = parseWpDate(news.acf?.end_at ?? news.end_at);
 
   if (start && now < start) return false;
   if (end && now > end) return false;
   return true;
 };
 
-const parseEventPublishDate = (value?: string, now = new Date()) => {
-  if (!value) return null;
-
-  const timeOnly = value.match(/^(\d{2}):(\d{2})(?::(\d{2}))?$/);
-  if (timeOnly) {
-    const [, hh, mm, ss] = timeOnly;
-    const date = new Date(now);
-    date.setHours(Number(hh), Number(mm), Number(ss ?? "0"), 0);
-    return Number.isNaN(date.getTime()) ? null : date;
-  }
-
-  const normalized =
-    value.includes(" ") && !value.includes("T")
-      ? value.replace(" ", "T")
-      : value;
-  const parsed = new Date(normalized);
-  return Number.isNaN(parsed.getTime()) ? null : parsed;
-};
-
 const isEventVisibleNow = (event: EventApiItem, now: Date) => {
-  const start = parseEventPublishDate(event.acf?.publish_start_at, now);
-  const end = parseEventPublishDate(event.acf?.publish_end_at, now);
+  const start = parseWpDateOrTime(event.acf?.publish_start_at, now);
+  const end = parseWpDateOrTime(event.acf?.publish_end_at, now);
 
   if (start && now < start) return false;
   if (end && now > end) return false;
@@ -187,10 +151,10 @@ export default function Home() {
           apiItems
             .filter((news) => isNewsVisibleNow(news, now))
             .sort((a, b) => {
-              const aStart = parseApiDate(
+              const aStart = parseWpDate(
                 a.acf?.start_at ?? a.start_at,
               )?.getTime() ?? Number.NEGATIVE_INFINITY;
-              const bStart = parseApiDate(
+              const bStart = parseWpDate(
                 b.acf?.start_at ?? b.start_at,
               )?.getTime() ?? Number.NEGATIVE_INFINITY;
               return bStart - aStart;
@@ -467,7 +431,7 @@ export default function Home() {
                         {news.acf?.category ? news.acf.category : "カテゴリなし"}
                       </span>
                       <time className="text-xs text-gray-500 whitespace-nowrap">
-                        {formatApiDate(news.acf?.start_at ?? news.start_at)}
+                        {formatJpDate(news.acf?.start_at ?? news.start_at)}
                       </time>
                     </div>
                     <p className="text-sm md:text-base text-gray-800">

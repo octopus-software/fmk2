@@ -1,22 +1,9 @@
 import type { PickupApiItem } from "../types/pickups";
-
-const normalizeWpDate = (value?: string) => {
-  if (!value) return "";
-  return value.includes(" ") && !value.includes("T")
-    ? value.replace(" ", "T")
-    : value;
-};
-
-export const parsePickupDate = (value?: string) => {
-  if (!value) return null;
-
-  const date = new Date(normalizeWpDate(value));
-  return Number.isNaN(date.getTime()) ? null : date;
-};
+import { parseWpDate } from "@/lib/date";
 
 export const isPickupVisibleNow = (item: PickupApiItem, now = new Date()) => {
-  const start = parsePickupDate(item.acf?.publish_start_at);
-  const end = parsePickupDate(item.acf?.publish_end_at);
+  const start = parseWpDate(item.acf?.publish_start_at);
+  const end = parseWpDate(item.acf?.publish_end_at);
 
   if (start && now < start) return false;
   if (end && now > end) return false;

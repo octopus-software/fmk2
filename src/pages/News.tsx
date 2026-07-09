@@ -12,19 +12,7 @@ import {
 } from "@/features/news/constants/news";
 import type { NewsApiItem } from "@/features/news/types/news";
 import { htmlToText, truncateText } from "@/features/news/utils/text";
-
-const formatNewsListDate = (value?: string) => {
-  if (!value) return "日付未設定";
-
-  const normalized = value.includes(" ") && !value.includes("T")
-    ? value.replace(" ", "T")
-    : value;
-  const date = new Date(normalized);
-  if (Number.isNaN(date.getTime())) return value;
-
-  const weekdays = ["日", "月", "火", "水", "木", "金", "土"];
-  return `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日 (${weekdays[date.getDay()]})`;
-};
+import { formatJpDate } from "@/lib/date";
 
 export default function News() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -205,7 +193,7 @@ export default function News() {
                         <div className="flex items-center gap-2">
                           <Calendar className="w-4 h-4" />
                           <time className="text-xs md:text-sm">
-                            {formatNewsListDate(news.acf?.start_at ?? news.date)}
+                            {formatJpDate(news.acf?.start_at ?? news.date)}
                           </time>
                         </div>
                       </div>

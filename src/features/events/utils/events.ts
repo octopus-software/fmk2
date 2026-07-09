@@ -1,11 +1,5 @@
 import type { EventApiItem } from "../types/events";
-
-const normalizeWpDate = (value?: string) => {
-  if (!value) return "";
-  return value.includes(" ") && !value.includes("T")
-    ? value.replace(" ", "T")
-    : value;
-};
+import { normalizeWpDate } from "@/lib/date";
 
 const parseYmd = (value: string) => {
   if (!/^\d{8}$/.test(value)) return null;

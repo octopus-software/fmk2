@@ -12,28 +12,10 @@ import {
 } from "@/features/events/utils/events";
 import type { EventApiItem } from "@/features/events/types/events";
 import { htmlToText, truncateText } from "@/features/news/utils/text";
-
-const parsePublishDate = (value?: string, now = new Date()) => {
-  if (!value) return null;
-
-  const timeOnly = value.match(/^(\d{2}):(\d{2})(?::(\d{2}))?$/);
-  if (timeOnly) {
-    const [, hh, mm, ss] = timeOnly;
-    const date = new Date(now);
-    date.setHours(Number(hh), Number(mm), Number(ss ?? "0"), 0);
-    return Number.isNaN(date.getTime()) ? null : date;
-  }
-
-  const normalized =
-    value.includes(" ") && !value.includes("T")
-      ? value.replace(" ", "T")
-      : value;
-  const date = new Date(normalized);
-  return Number.isNaN(date.getTime()) ? null : date;
-};
+import { parseWpDateOrTime } from "@/lib/date";
 
 const isVisibleNow = (event: EventApiItem, now: Date) => {
-  const startAt = parsePublishDate(event.acf?.publish_start_at, now);
+  const startAt = parseWpDateOrTime(event.acf?.publish_start_at, now);
 
   // イベント一覧は開始前のみ非表示。終了後は表示対象に含める。
   if (startAt && now < startAt) return false;
