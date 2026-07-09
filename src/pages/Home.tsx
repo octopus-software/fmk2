@@ -296,6 +296,7 @@ export default function Home() {
             <h2 className="text-4xl mb-2 uppercase tracking-wider">
               PICK UP !!
             </h2>
+            <span className="block mx-auto mb-3 w-12 h-0.5 bg-orange-500 rounded-full"></span>
             <p className="text-sm text-gray-600">
               ピックアップ
             </p>
@@ -403,7 +404,8 @@ export default function Home() {
             <h2 className="text-4xl mb-2 uppercase tracking-wider">
               NEWS
             </h2>
-            <p className="text-sm text-gray-600">お知らせ</p>
+            <span className="block mx-auto mb-3 w-12 h-0.5 bg-blue-600 rounded-full"></span>
+            <p className="text-sm text-gray-600">最新のお知らせや施設情報をご案内します</p>
           </div>
 
           {/* APIから取得したニュース */}
@@ -455,7 +457,8 @@ export default function Home() {
             <h2 className="text-4xl mb-2 uppercase tracking-wider">
               EVENT
             </h2>
-            <p className="text-sm text-gray-600">イベント</p>
+            <span className="block mx-auto mb-3 w-12 h-0.5 bg-purple-600 rounded-full"></span>
+            <p className="text-sm text-gray-600">季節のイベントや楽しい催しをご紹介します</p>
           </div>
 
           {eventsApiError && (
@@ -516,7 +519,8 @@ export default function Home() {
       <section id="floor" className="py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-4xl mb-4">店舗を探す</h2>
+            <h2 className="text-4xl mb-2">店舗を探す</h2>
+            <span className="block mx-auto mb-4 w-12 h-0.5 bg-indigo-600 rounded-full"></span>
             <p className="text-lg text-gray-600">
               カテゴリから店舗を検索できます
             </p>
