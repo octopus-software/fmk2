@@ -272,9 +272,7 @@ export default function Home() {
                   </p>
                   <p className="text-sm md:text-lg text-gray-700 leading-relaxed mb-8">
                     ファッション、グルメ、日用品から
-                    エンターテインメントまで、
-                    <br />
-                    充実したフロア構成でお待ちしております。
+                    エンターテインメントまで、 充実したフロア構成でお待ちしております。
                   </p>
                 </div>
                 <div>
