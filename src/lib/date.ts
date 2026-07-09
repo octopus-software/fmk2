@@ -28,6 +28,17 @@ export const parseWpDateOrTime = (value?: string, now = new Date()): Date | null
   return parseWpDate(value);
 };
 
+// start 〜 end の期間内かどうかを判定する。null は制限なしとみなす
+export const isWithinRange = (
+  start: Date | null,
+  end: Date | null,
+  now: Date,
+): boolean => {
+  if (start && now < start) return false;
+  if (end && now > end) return false;
+  return true;
+};
+
 const WEEKDAYS = ["日", "月", "火", "水", "木", "金", "土"] as const;
 
 // 日付を "YYYY年M月D日 (曜)" 形式にフォーマットする

@@ -27,7 +27,7 @@ import {
 import { htmlToText } from "@/features/news/utils/text";
 import { fetchSns } from "@/features/sns/api/fetchSns";
 import type { SnsApiItem } from "@/features/sns/types/sns";
-import { parseWpDate, parseWpDateOrTime, formatJpDate } from "@/lib/date";
+import { parseWpDate, parseWpDateOrTime, formatJpDate, isWithinRange } from "@/lib/date";
 
 type NewsApiItem = {
   id: number;
@@ -41,23 +41,19 @@ type NewsApiItem = {
   end_at?: string;
 };
 
-const isNewsVisibleNow = (news: NewsApiItem, now: Date) => {
-  const start = parseWpDate(news.acf?.start_at ?? news.start_at);
-  const end = parseWpDate(news.acf?.end_at ?? news.end_at);
+const isNewsVisibleNow = (news: NewsApiItem, now: Date) =>
+  isWithinRange(
+    parseWpDate(news.acf?.start_at ?? news.start_at),
+    parseWpDate(news.acf?.end_at ?? news.end_at),
+    now,
+  );
 
-  if (start && now < start) return false;
-  if (end && now > end) return false;
-  return true;
-};
-
-const isEventVisibleNow = (event: EventApiItem, now: Date) => {
-  const start = parseWpDateOrTime(event.acf?.publish_start_at, now);
-  const end = parseWpDateOrTime(event.acf?.publish_end_at, now);
-
-  if (start && now < start) return false;
-  if (end && now > end) return false;
-  return true;
-};
+const isEventVisibleNow = (event: EventApiItem, now: Date) =>
+  isWithinRange(
+    parseWpDateOrTime(event.acf?.publish_start_at, now),
+    parseWpDateOrTime(event.acf?.publish_end_at, now),
+    now,
+  );
 
 export default function Home() {
   const [selectedCategory, setSelectedCategory] =

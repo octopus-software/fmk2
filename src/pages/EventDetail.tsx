@@ -13,21 +13,10 @@ import {
 } from "@/features/events/utils/events";
 import type { EventApiItem } from "@/features/events/types/events";
 import { htmlToText } from "@/features/news/utils/text";
+import { parseWpDate, isWithinRange } from "@/lib/date";
 
-const parsePublishStartAt = (value?: string) => {
-  if (!value) return null;
-  const normalized = value.includes(" ") && !value.includes("T")
-    ? value.replace(" ", "T")
-    : value;
-  const date = new Date(normalized);
-  return Number.isNaN(date.getTime()) ? null : date;
-};
-
-const isStarted = (item: EventApiItem, now: Date) => {
-  const startAt = parsePublishStartAt(item.acf?.publish_start_at);
-  if (!startAt) return true;
-  return startAt.getTime() <= now.getTime();
-};
+const isStarted = (item: EventApiItem, now: Date) =>
+  isWithinRange(parseWpDate(item.acf?.publish_start_at), null, now);
 
 export default function EventDetail() {
   const { id } = useParams();

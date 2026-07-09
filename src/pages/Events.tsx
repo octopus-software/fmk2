@@ -12,15 +12,11 @@ import {
 } from "@/features/events/utils/events";
 import type { EventApiItem } from "@/features/events/types/events";
 import { htmlToText, truncateText } from "@/features/news/utils/text";
-import { parseWpDateOrTime } from "@/lib/date";
+import { parseWpDateOrTime, isWithinRange } from "@/lib/date";
 
-const isVisibleNow = (event: EventApiItem, now: Date) => {
-  const startAt = parseWpDateOrTime(event.acf?.publish_start_at, now);
-
-  // イベント一覧は開始前のみ非表示。終了後は表示対象に含める。
-  if (startAt && now < startAt) return false;
-  return true;
-};
+// イベント一覧は開始前のみ非表示。終了後は表示対象に含める。
+const isVisibleNow = (event: EventApiItem, now: Date) =>
+  isWithinRange(parseWpDateOrTime(event.acf?.publish_start_at, now), null, now);
 
 export default function Events() {
   const [searchParams, setSearchParams] = useSearchParams();
