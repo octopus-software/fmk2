@@ -1,9 +1,17 @@
 import { Link } from "react-router";
 import { Building2 } from "lucide-react";
-import { shopsItems } from "../data/shopsData";
+import { useEffect, useState } from "react";
+import { fetchShops } from "@/features/shops/api/fetchShops";
+import type { ShopItem } from "@/features/shops/types/shops";
 import { ImageWithFallback } from "../components/figma/ImageWithFallback";
 
 export default function FloorGuide() {
+  const [shopsItems, setShopsItems] = useState<ShopItem[]>([]);
+
+  useEffect(() => {
+    fetchShops().then(setShopsItems).catch(() => {});
+  }, []);
+
   const floors = [
     {
       id: "6F",

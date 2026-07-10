@@ -10,7 +10,8 @@ import { ImageWithFallback } from "../components/figma/ImageWithFallback";
 import { useState, useEffect } from "react";
 import { Link } from "react-router";
 import axios from "axios";
-import { shopsItems } from "../data/shopsData";
+import { fetchShops } from "@/features/shops/api/fetchShops";
+import type { ShopItem } from "@/features/shops/types/shops";
 import mainImage from "figma:asset/images/hero.png";
 import { fetchPickups } from "@/features/pickups/api/fetchPickups";
 import type { PickupApiItem } from "@/features/pickups/types/pickups";
@@ -69,6 +70,7 @@ export default function Home() {
   const [eventsApiError, setEventsApiError] = useState<string | null>(null);
   const [snsSlideIndex, setSnsSlideIndex] = useState(0);
   const [snsApiItems, setSnsApiItems] = useState<SnsApiItem[]>([]);
+  const [shopsItems, setShopsItems] = useState<ShopItem[]>([]);
 
   const heroSlides = pickupApiItems;
 
@@ -195,6 +197,10 @@ export default function Home() {
     fetchSns()
       .then((items) => setSnsApiItems(items))
       .catch(() => {});
+  }, []);
+
+  useEffect(() => {
+    fetchShops().then(setShopsItems).catch(() => {});
   }, []);
 
   useEffect(() => {

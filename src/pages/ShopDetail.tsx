@@ -1,13 +1,47 @@
 import { useParams, Link } from "react-router";
+import { useEffect, useMemo, useState } from "react";
 import { MapPin, Clock, Phone, Globe, ArrowLeft, Tag } from "lucide-react";
-import { shopsItems } from "../data/shopsData";
+import { fetchShops } from "@/features/shops/api/fetchShops";
+import type { ShopItem } from "@/features/shops/types/shops";
 import { ImageWithFallback } from "../components/figma/ImageWithFallback";
 
 export default function ShopDetail() {
   const { id } = useParams();
-  const shop = shopsItems.find((item) => item.id === Number(id));
+  const shopId = useMemo(() => Number(id), [id]);
 
-  if (!shop) {
+  const [allShops, setAllShops] = useState<ShopItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [notFound, setNotFound] = useState(false);
+
+  useEffect(() => {
+    let cancelled = false;
+    setLoading(true);
+    fetchShops()
+      .then((items) => {
+        if (cancelled) return;
+        setAllShops(items);
+        if (!items.some((item) => item.id === shopId)) setNotFound(true);
+      })
+      .catch(() => {
+        if (!cancelled) setNotFound(true);
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
+    return () => { cancelled = true; };
+  }, [shopId]);
+
+  const shop = allShops.find((item) => item.id === shopId);
+
+  if (loading) {
+    return (
+      <div className="bg-gray-50 min-h-screen flex items-center justify-center">
+        <p className="text-gray-500">読み込み中...</p>
+      </div>
+    );
+  }
+
+  if (notFound || !shop) {
     return (
       <div className="bg-gray-50 min-h-screen flex items-center justify-center">
         <div className="text-center">
@@ -173,7 +207,7 @@ export default function ShopDetail() {
         <div className="mt-12">
           <h2 className="text-xl md:text-2xl mb-6 text-gray-900">同じフロアの店舗</h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {shopsItems
+            {allShops
               .filter((item) => item.floor === shop.floor && item.id !== shop.id)
               .slice(0, 4)
               .map((item) => (
