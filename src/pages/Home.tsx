@@ -107,17 +107,20 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    if (heroSlides.length === 0) return;
+    const isCarousel = isMobile ? heroSlides.length >= 2 : heroSlides.length >= 5;
+    if (!isCarousel) return;
 
     const timer = setInterval(() => {
       setHeroSlideIndex((prev) => prev + 1);
     }, 5000);
 
     return () => clearInterval(timer);
-  }, [heroSlides.length]);
+  }, [heroSlides.length, isMobile]);
 
   useEffect(() => {
-    if (heroSlides.length === 0) return;
+    // SP は2枚以上、PC は5枚以上でカルーセルのループリセットが必要
+    const isCarousel = isMobile ? heroSlides.length >= 2 : heroSlides.length >= 5;
+    if (!isCarousel) return;
 
     if (heroSlideIndex >= heroSlides.length * 2) {
       const timeout = setTimeout(() => {
@@ -134,7 +137,7 @@ export default function Home() {
       }, 500);
       return () => clearTimeout(timeout);
     }
-  }, [heroSlideIndex, heroSlides.length]);
+  }, [heroSlideIndex, heroSlides.length, isMobile]);
 
   useEffect(() => {
     axios
@@ -320,7 +323,59 @@ export default function Home() {
 
           {heroSlides.length === 0 && !pickupApiError ? (
             <div className="text-center text-gray-600 py-8">ピックアップはありません</div>
+          ) : !isMobile && heroSlides.length <= 4 ? (
+            // PC: 1〜4枚はグリッド表示
+            <div className={`flex flex-wrap justify-center ${heroSlides.length <= 3 ? "gap-4" : ""}`}>
+              {heroSlides.map((s) => (
+                <Link
+                  key={s.id}
+                  to={`/pickups/${s.id}`}
+                  className="w-1/4 relative overflow-hidden group cursor-pointer"
+                >
+                  <ImageWithFallback
+                    src={getPickupImageUrl(s)}
+                    alt={htmlToText(s.title?.rendered) || "ピックアップ画像"}
+                    className="w-full aspect-square object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent flex flex-col justify-end p-6 md:p-8">
+                    <p className="text-white text-sm md:text-base mb-2 opacity-90">
+                      {s.acf?.pickup_period ?? ""}
+                    </p>
+                    <h3 className="text-white text-lg md:text-xl mb-2 whitespace-pre-line">
+                      {htmlToText(s.title?.rendered) || "タイトルなし"}
+                    </h3>
+                    <p className="text-white text-base md:text-lg opacity-90">
+                      {s.acf?.subtitle ?? ""}
+                    </p>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          ) : isMobile && heroSlides.length === 1 ? (
+            // SP: 1枚のみはそのまま表示
+            <Link
+              to={`/pickups/${heroSlides[0].id}`}
+              className="block relative overflow-hidden group cursor-pointer"
+            >
+              <ImageWithFallback
+                src={getPickupImageUrl(heroSlides[0])}
+                alt={htmlToText(heroSlides[0].title?.rendered) || "ピックアップ画像"}
+                className="w-full aspect-square object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent flex flex-col justify-end p-6">
+                <p className="text-white text-sm mb-2 opacity-90">
+                  {heroSlides[0].acf?.pickup_period ?? ""}
+                </p>
+                <h3 className="text-white text-lg mb-2 whitespace-pre-line">
+                  {htmlToText(heroSlides[0].title?.rendered) || "タイトルなし"}
+                </h3>
+                <p className="text-white text-base opacity-90">
+                  {heroSlides[0].acf?.subtitle ?? ""}
+                </p>
+              </div>
+            </Link>
           ) : (
+            // SP: 2枚以上 / PC: 5枚以上 → カルーセル
             <>
               <div className="overflow-hidden relative">
                 <div
@@ -350,7 +405,7 @@ export default function Home() {
                         <p className="text-white text-sm md:text-base mb-2 opacity-90">
                           {s.acf?.pickup_period ?? ""}
                         </p>
-                        <h3 className="text-white text-2xl md:text-3xl mb-2 whitespace-pre-line">
+                        <h3 className="text-white text-lg md:text-xl mb-2 whitespace-pre-line">
                           {htmlToText(s.title?.rendered) || "タイトルなし"}
                         </h3>
                         <p className="text-white text-base md:text-lg opacity-90">
@@ -360,9 +415,6 @@ export default function Home() {
                     </Link>
                   ))}
                 </div>
-                {/* Edge Overlays - Desktop only */}
-                <div className="hidden md:block absolute left-0 top-0 bottom-0 w-1/4 bg-black/40 pointer-events-none"></div>
-                <div className="hidden md:block absolute right-0 top-0 bottom-0 w-1/4 bg-black/40 pointer-events-none"></div>
               </div>
 
               {/* Navigation Arrows */}

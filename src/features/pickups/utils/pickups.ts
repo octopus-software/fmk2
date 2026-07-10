@@ -13,10 +13,10 @@ export const getPickupImageUrl = (item: PickupApiItem) => {
   if (!media) return "";
 
   return (
-    media.media_details?.sizes?.medium?.source_url ??
-    media.media_details?.sizes?.large?.source_url ??
     media.media_details?.sizes?.full?.source_url ??
+    media.media_details?.sizes?.large?.source_url ??
     media.source_url ??
+    media.media_details?.sizes?.medium?.source_url ??
     ""
   );
 };
