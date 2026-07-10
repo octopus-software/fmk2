@@ -1,6 +1,7 @@
 import { Calendar } from "lucide-react";
-import { Link, useSearchParams } from "react-router";
-import { useEffect, useMemo, useState } from "react";
+import { Link } from "react-router";
+import { useEffect, useState } from "react";
+import { usePagination } from "@/hooks/usePagination";
 import {
   fetchNews,
   filterStartedNews,
@@ -15,69 +16,12 @@ import { htmlToText, truncateText } from "@/features/news/utils/text";
 import { formatJpDate } from "@/lib/date";
 
 export default function News() {
-  const [searchParams, setSearchParams] = useSearchParams();
   const [allNewsItems, setAllNewsItems] = useState<NewsApiItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const currentPage = useMemo(() => {
-    const raw = Number(searchParams.get("page") ?? "1");
-    return Number.isFinite(raw) && raw > 0 ? Math.floor(raw) : 1;
-  }, [searchParams]);
-
-  const totalPages = useMemo(() => {
-    return Math.max(1, Math.ceil(allNewsItems.length / NEWS_PAGE_SIZE));
-  }, [allNewsItems]);
-
-  const pagedNewsItems = useMemo(() => {
-    const start = (currentPage - 1) * NEWS_PAGE_SIZE;
-    return allNewsItems.slice(start, start + NEWS_PAGE_SIZE);
-  }, [allNewsItems, currentPage]);
-
-  const pagerItems = useMemo<(number | "...")[]>(() => {
-    if (totalPages <= 7) {
-      return Array.from({ length: totalPages }, (_, i) => i + 1);
-    }
-
-    if (currentPage <= 4) {
-      return [1, 2, 3, 4, 5, "...", totalPages];
-    }
-
-    if (currentPage >= totalPages - 3) {
-      return [
-        1,
-        "...",
-        totalPages - 4,
-        totalPages - 3,
-        totalPages - 2,
-        totalPages - 1,
-        totalPages,
-      ];
-    }
-
-    return [
-      1,
-      "...",
-      currentPage - 1,
-      currentPage,
-      currentPage + 1,
-      "...",
-      totalPages,
-    ];
-  }, [currentPage, totalPages]);
-
-  const onPageChange = (nextPage: number) => {
-    if (nextPage < 1 || nextPage > totalPages || nextPage === currentPage) return;
-
-    const nextParams = new URLSearchParams(searchParams);
-    if (nextPage === 1) {
-      nextParams.delete("page");
-    } else {
-      nextParams.set("page", String(nextPage));
-    }
-    setSearchParams(nextParams);
-    window.scrollTo({ top: 0, behavior: "auto" });
-  };
+  const { currentPage, totalPages, pagedItems: pagedNewsItems, pagerItems, onPageChange } =
+    usePagination(allNewsItems, NEWS_PAGE_SIZE);
 
   useEffect(() => {
     let cancelled = false;
@@ -110,17 +54,6 @@ export default function News() {
       cancelled = true;
     };
   }, []);
-
-  useEffect(() => {
-    if (currentPage <= totalPages) return;
-    const nextParams = new URLSearchParams(searchParams);
-    if (totalPages === 1) {
-      nextParams.delete("page");
-    } else {
-      nextParams.set("page", String(totalPages));
-    }
-    setSearchParams(nextParams);
-  }, [currentPage, searchParams, setSearchParams, totalPages]);
 
   return (
     <div className="bg-gray-50 min-h-screen text-sm md:text-base">
