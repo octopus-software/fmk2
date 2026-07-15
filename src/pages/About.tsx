@@ -139,7 +139,7 @@ export default function About() {
         {/* Section 2: AED */}
         <section className="bg-white rounded-lg shadow-lg overflow-hidden mb-8">
           <div className="grid md:grid-cols-2 gap-0">
-            <div className="h-full order-2 md:order-1">
+            <div className="h-full order-2 md:order-none">
               <ImageWithFallback
                 src="https://images.unsplash.com/photo-1516574187841-cb9cc2ca948b?w=800&h=400&fit=crop"
                 alt="AED設置場所"
@@ -214,7 +214,7 @@ export default function About() {
         {/* Section 4: ペットをお連れのお客様 */}
         <section className="bg-white rounded-lg shadow-lg overflow-hidden mb-8">
           <div className="grid md:grid-cols-2 gap-0">
-            <div className="h-full order-2 md:order-1">
+            <div className="h-full order-2 md:order-none">
               <ImageWithFallback
                 src="https://images.unsplash.com/photo-1548199973-03cce0bbc87b?w=800&h=400&fit=crop"
                 alt="ペット同伴について"

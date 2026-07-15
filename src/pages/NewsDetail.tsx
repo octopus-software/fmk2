@@ -10,19 +10,7 @@ import {
 import type { NewsApiItem } from "@/features/news/types/news";
 import { toTime } from "@/features/news/utils/date";
 import { htmlToText } from "@/features/news/utils/text";
-
-const formatNewsDetailDate = (value?: string) => {
-  if (!value) return "日付未設定";
-
-  const normalized = value.includes(" ") && !value.includes("T")
-    ? value.replace(" ", "T")
-    : value;
-  const date = new Date(normalized);
-  if (Number.isNaN(date.getTime())) return value;
-
-  const weekdays = ["日", "月", "火", "水", "木", "金", "土"];
-  return `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日 (${weekdays[date.getDay()]})`;
-};
+import { formatJpDate } from "@/lib/date";
 
 export default function NewsDetail() {
   const { id } = useParams();
@@ -168,7 +156,7 @@ export default function NewsDetail() {
             </span>
             <div className="flex items-center gap-2 text-gray-600">
               <Calendar className="w-4 h-4" />
-              <time className="text-xs md:text-sm">{formatNewsDetailDate(newsItem.acf?.start_at ?? newsItem.date)}</time>
+              <time className="text-xs md:text-sm">{formatJpDate(newsItem.acf?.start_at ?? newsItem.date)}</time>
             </div>
           </div>
 
@@ -215,7 +203,7 @@ export default function NewsDetail() {
                       {item.acf?.category ?? "カテゴリなし"}
                     </span>
                     <time className="text-xs md:text-sm text-gray-600">
-                      {formatNewsDetailDate(item.acf?.start_at ?? item.date)}
+                      {formatJpDate(item.acf?.start_at ?? item.date)}
                     </time>
                   </div>
                   <h3 className="text-sm md:text-base text-gray-900 hover:text-blue-600 transition-colors line-clamp-2">

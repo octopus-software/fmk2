@@ -10,7 +10,8 @@ import { ImageWithFallback } from "../components/figma/ImageWithFallback";
 import { useState, useEffect } from "react";
 import { Link } from "react-router";
 import axios from "axios";
-import { shopsItems } from "../data/shopsData";
+import { fetchShops } from "@/features/shops/api/fetchShops";
+import type { ShopItem } from "@/features/shops/types/shops";
 import mainImage from "figma:asset/images/hero.png";
 import { fetchPickups } from "@/features/pickups/api/fetchPickups";
 import type { PickupApiItem } from "@/features/pickups/types/pickups";
@@ -25,6 +26,9 @@ import {
   isEventNew,
 } from "@/features/events/utils/events";
 import { htmlToText } from "@/features/news/utils/text";
+import { fetchSns } from "@/features/sns/api/fetchSns";
+import type { SnsApiItem } from "@/features/sns/types/sns";
+import { parseWpDate, parseWpDateOrTime, formatJpDate, isWithinRange } from "@/lib/date";
 
 type NewsApiItem = {
   id: number;
@@ -38,60 +42,19 @@ type NewsApiItem = {
   end_at?: string;
 };
 
-const parseApiDate = (value?: string) => {
-  if (!value) return null;
-  const normalized =
-    value.includes(" ") && !value.includes("T")
-      ? value.replace(" ", "T")
-      : value;
-  const date = new Date(normalized);
-  return Number.isNaN(date.getTime()) ? null : date;
-};
+const isNewsVisibleNow = (news: NewsApiItem, now: Date) =>
+  isWithinRange(
+    parseWpDate(news.acf?.start_at ?? news.start_at),
+    parseWpDate(news.acf?.end_at ?? news.end_at),
+    now,
+  );
 
-const formatApiDate = (value?: string) => {
-  const date = parseApiDate(value);
-  if (!date) return "日付未設定";
-
-  const weekdays = ["日", "月", "火", "水", "木", "金", "土"];
-  return `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日 (${weekdays[date.getDay()]})`;
-};
-
-const isNewsVisibleNow = (news: NewsApiItem, now: Date) => {
-  const start = parseApiDate(news.acf?.start_at ?? news.start_at);
-  const end = parseApiDate(news.acf?.end_at ?? news.end_at);
-
-  if (start && now < start) return false;
-  if (end && now > end) return false;
-  return true;
-};
-
-const parseEventPublishDate = (value?: string, now = new Date()) => {
-  if (!value) return null;
-
-  const timeOnly = value.match(/^(\d{2}):(\d{2})(?::(\d{2}))?$/);
-  if (timeOnly) {
-    const [, hh, mm, ss] = timeOnly;
-    const date = new Date(now);
-    date.setHours(Number(hh), Number(mm), Number(ss ?? "0"), 0);
-    return Number.isNaN(date.getTime()) ? null : date;
-  }
-
-  const normalized =
-    value.includes(" ") && !value.includes("T")
-      ? value.replace(" ", "T")
-      : value;
-  const parsed = new Date(normalized);
-  return Number.isNaN(parsed.getTime()) ? null : parsed;
-};
-
-const isEventVisibleNow = (event: EventApiItem, now: Date) => {
-  const start = parseEventPublishDate(event.acf?.publish_start_at, now);
-  const end = parseEventPublishDate(event.acf?.publish_end_at, now);
-
-  if (start && now < start) return false;
-  if (end && now > end) return false;
-  return true;
-};
+const isEventVisibleNow = (event: EventApiItem, now: Date) =>
+  isWithinRange(
+    parseWpDateOrTime(event.acf?.publish_start_at, now),
+    parseWpDateOrTime(event.acf?.publish_end_at, now),
+    now,
+  );
 
 export default function Home() {
   const [selectedCategory, setSelectedCategory] =
@@ -105,8 +68,15 @@ export default function Home() {
   const [newsApiError, setNewsApiError] = useState<string | null>(null);
   const [eventsApiItems, setEventsApiItems] = useState<EventApiItem[]>([]);
   const [eventsApiError, setEventsApiError] = useState<string | null>(null);
+  const [snsSlideIndex, setSnsSlideIndex] = useState(0);
+  const [snsApiItems, setSnsApiItems] = useState<SnsApiItem[]>([]);
+  const [shopsItems, setShopsItems] = useState<ShopItem[]>([]);
 
   const heroSlides = pickupApiItems;
+
+  const snsPosts = snsApiItems
+    .filter((item) => item.acf?.post_id)
+    .map((item) => `https://www.instagram.com/p/${item.acf!.post_id}/`);
 
   useEffect(() => {
     const checkMobile = () => {
@@ -137,17 +107,20 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    if (heroSlides.length === 0) return;
+    const isCarousel = isMobile ? heroSlides.length >= 2 : heroSlides.length >= 5;
+    if (!isCarousel) return;
 
     const timer = setInterval(() => {
       setHeroSlideIndex((prev) => prev + 1);
     }, 5000);
 
     return () => clearInterval(timer);
-  }, [heroSlides.length]);
+  }, [heroSlides.length, isMobile]);
 
   useEffect(() => {
-    if (heroSlides.length === 0) return;
+    // SP は2枚以上、PC は5枚以上でカルーセルのループリセットが必要
+    const isCarousel = isMobile ? heroSlides.length >= 2 : heroSlides.length >= 5;
+    if (!isCarousel) return;
 
     if (heroSlideIndex >= heroSlides.length * 2) {
       const timeout = setTimeout(() => {
@@ -164,7 +137,7 @@ export default function Home() {
       }, 500);
       return () => clearTimeout(timeout);
     }
-  }, [heroSlideIndex, heroSlides.length]);
+  }, [heroSlideIndex, heroSlides.length, isMobile]);
 
   useEffect(() => {
     axios
@@ -179,10 +152,10 @@ export default function Home() {
           apiItems
             .filter((news) => isNewsVisibleNow(news, now))
             .sort((a, b) => {
-              const aStart = parseApiDate(
+              const aStart = parseWpDate(
                 a.acf?.start_at ?? a.start_at,
               )?.getTime() ?? Number.NEGATIVE_INFINITY;
-              const bStart = parseApiDate(
+              const bStart = parseWpDate(
                 b.acf?.start_at ?? b.start_at,
               )?.getTime() ?? Number.NEGATIVE_INFINITY;
               return bStart - aStart;
@@ -210,6 +183,43 @@ export default function Home() {
         setEventsApiError("イベントAPIの取得に失敗しました");
       });
   }, []);
+
+  useEffect(() => {
+    const existing = document.querySelector('script[src*="instagram.com/embed.js"]');
+    if (!existing) {
+      const script = document.createElement("script");
+      script.src = "//www.instagram.com/embed.js";
+      script.async = true;
+      document.body.appendChild(script);
+    } else if ((window as any).instgrm) {
+      (window as any).instgrm.Embeds.process();
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchSns()
+      .then((items) => setSnsApiItems(items))
+      .catch(() => {});
+  }, []);
+
+  useEffect(() => {
+    fetchShops().then(setShopsItems).catch(() => {});
+  }, []);
+
+  useEffect(() => {
+    if (snsPosts.length === 0) return;
+    if ((window as any).instgrm) {
+      (window as any).instgrm.Embeds.process();
+    }
+  }, [snsPosts.length]);
+
+  useEffect(() => {
+    if (!isMobile || snsPosts.length === 0) return;
+    const timer = setInterval(() => {
+      setSnsSlideIndex((prev) => (prev + 1) % snsPosts.length);
+    }, 5000);
+    return () => clearInterval(timer);
+  }, [isMobile, snsPosts.length]);
 
   const nextSlide = () => {
     if (heroSlides.length === 0) return;
@@ -272,9 +282,7 @@ export default function Home() {
                   </p>
                   <p className="text-sm md:text-lg text-gray-700 leading-relaxed mb-8">
                     ファッション、グルメ、日用品から
-                    エンターテインメントまで、
-                    <br />
-                    充実したフロア構成でお待ちしております。
+                    エンターテインメントまで、 充実したフロア構成でお待ちしております。
                   </p>
                 </div>
                 <div>
@@ -298,6 +306,7 @@ export default function Home() {
             <h2 className="text-4xl mb-2 uppercase tracking-wider">
               PICK UP !!
             </h2>
+            <span className="block mx-auto mb-3 w-12 h-0.5 bg-orange-500 rounded-full"></span>
             <p className="text-sm text-gray-600">
               ピックアップ
             </p>
@@ -314,7 +323,59 @@ export default function Home() {
 
           {heroSlides.length === 0 && !pickupApiError ? (
             <div className="text-center text-gray-600 py-8">ピックアップはありません</div>
+          ) : !isMobile && heroSlides.length <= 4 ? (
+            // PC: 1〜4枚はグリッド表示
+            <div className={`flex flex-wrap justify-center ${heroSlides.length <= 3 ? "gap-4" : ""}`}>
+              {heroSlides.map((s) => (
+                <Link
+                  key={s.id}
+                  to={`/pickups/${s.id}`}
+                  className="w-1/4 relative overflow-hidden group cursor-pointer"
+                >
+                  <ImageWithFallback
+                    src={getPickupImageUrl(s)}
+                    alt={htmlToText(s.title?.rendered) || "ピックアップ画像"}
+                    className="w-full aspect-square object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent flex flex-col justify-end p-6 md:p-8">
+                    <p className="text-white text-sm md:text-base mb-2 opacity-90">
+                      {s.acf?.pickup_period ?? ""}
+                    </p>
+                    <h3 className="text-white text-lg md:text-xl mb-2 whitespace-pre-line">
+                      {htmlToText(s.title?.rendered) || "タイトルなし"}
+                    </h3>
+                    <p className="text-white text-base md:text-lg opacity-90">
+                      {s.acf?.subtitle ?? ""}
+                    </p>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          ) : isMobile && heroSlides.length === 1 ? (
+            // SP: 1枚のみはそのまま表示
+            <Link
+              to={`/pickups/${heroSlides[0].id}`}
+              className="block relative overflow-hidden group cursor-pointer"
+            >
+              <ImageWithFallback
+                src={getPickupImageUrl(heroSlides[0])}
+                alt={htmlToText(heroSlides[0].title?.rendered) || "ピックアップ画像"}
+                className="w-full aspect-square object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent flex flex-col justify-end p-6">
+                <p className="text-white text-sm mb-2 opacity-90">
+                  {heroSlides[0].acf?.pickup_period ?? ""}
+                </p>
+                <h3 className="text-white text-lg mb-2 whitespace-pre-line">
+                  {htmlToText(heroSlides[0].title?.rendered) || "タイトルなし"}
+                </h3>
+                <p className="text-white text-base opacity-90">
+                  {heroSlides[0].acf?.subtitle ?? ""}
+                </p>
+              </div>
+            </Link>
           ) : (
+            // SP: 2枚以上 / PC: 5枚以上 → カルーセル
             <>
               <div className="overflow-hidden relative">
                 <div
@@ -344,7 +405,7 @@ export default function Home() {
                         <p className="text-white text-sm md:text-base mb-2 opacity-90">
                           {s.acf?.pickup_period ?? ""}
                         </p>
-                        <h3 className="text-white text-2xl md:text-3xl mb-2 whitespace-pre-line">
+                        <h3 className="text-white text-lg md:text-xl mb-2 whitespace-pre-line">
                           {htmlToText(s.title?.rendered) || "タイトルなし"}
                         </h3>
                         <p className="text-white text-base md:text-lg opacity-90">
@@ -354,9 +415,6 @@ export default function Home() {
                     </Link>
                   ))}
                 </div>
-                {/* Edge Overlays - Desktop only */}
-                <div className="hidden md:block absolute left-0 top-0 bottom-0 w-1/4 bg-black/40 pointer-events-none"></div>
-                <div className="hidden md:block absolute right-0 top-0 bottom-0 w-1/4 bg-black/40 pointer-events-none"></div>
               </div>
 
               {/* Navigation Arrows */}
@@ -405,7 +463,8 @@ export default function Home() {
             <h2 className="text-4xl mb-2 uppercase tracking-wider">
               NEWS
             </h2>
-            <p className="text-sm text-gray-600">お知らせ</p>
+            <span className="block mx-auto mb-3 w-12 h-0.5 bg-blue-600 rounded-full"></span>
+            <p className="text-sm text-gray-600">最新のお知らせや施設情報をご案内します</p>
           </div>
 
           {/* APIから取得したニュース */}
@@ -426,7 +485,7 @@ export default function Home() {
                         {news.acf?.category ? news.acf.category : "カテゴリなし"}
                       </span>
                       <time className="text-xs text-gray-500 whitespace-nowrap">
-                        {formatApiDate(news.acf?.start_at ?? news.start_at)}
+                        {formatJpDate(news.acf?.start_at ?? news.start_at)}
                       </time>
                     </div>
                     <p className="text-sm md:text-base text-gray-800">
@@ -457,7 +516,8 @@ export default function Home() {
             <h2 className="text-4xl mb-2 uppercase tracking-wider">
               EVENT
             </h2>
-            <p className="text-sm text-gray-600">イベント</p>
+            <span className="block mx-auto mb-3 w-12 h-0.5 bg-purple-600 rounded-full"></span>
+            <p className="text-sm text-gray-600">季節のイベントや楽しい催しをご紹介します</p>
           </div>
 
           {eventsApiError && (
@@ -518,7 +578,8 @@ export default function Home() {
       <section id="floor" className="py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-4xl mb-4">店舗を探す</h2>
+            <h2 className="text-4xl mb-2">店舗を探す</h2>
+            <span className="block mx-auto mb-4 w-12 h-0.5 bg-indigo-600 rounded-full"></span>
             <p className="text-lg text-gray-600">
               カテゴリから店舗を検索できます
             </p>
@@ -824,6 +885,89 @@ export default function Home() {
               )}
             </div>
           )}
+        </div>
+      </section>
+
+      {/* SNS Section */}
+      <section className="py-16 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-10">
+            <h2 className="text-4xl mb-2 uppercase tracking-wider">SNS</h2>
+            <span className="block mx-auto mb-3 w-12 h-0.5 bg-pink-500 rounded-full"></span>
+            <p className="text-sm text-gray-600">インスタグラム</p>
+          </div>
+
+          {/* PC: 常に3スロット固定 */}
+          <div className="hidden md:flex" style={{ gap: "1.5rem" }}>
+            {Array.from({ length: 3 }, (_, i) => {
+              const url = snsPosts[i];
+              return (
+                <div key={i} style={{ flex: "1 1 0%", minWidth: 0 }}>
+                  {url ? (
+                    <blockquote
+                      className="instagram-media"
+                      data-instgrm-permalink={url}
+                      data-instgrm-version="14"
+                      style={{ maxWidth: "100%", width: "100%", margin: "0 auto" }}
+                    />
+                  ) : (
+                    <div />
+                  )}
+                </div>
+              );
+            })}
+          </div>
+
+          {/* SP: 実投稿のみカルーセル */}
+          <div className="md:hidden overflow-hidden">
+            <div
+              className="flex"
+              style={{
+                transform: `translateX(-${snsSlideIndex * 100}%)`,
+                transition: "transform 0.5s ease-in-out",
+              }}
+            >
+              {snsPosts.map((url, i) => (
+                <div key={i} style={{ flexShrink: 0, width: "100%" }}>
+                  <blockquote
+                    className="instagram-media"
+                    data-instgrm-permalink={url}
+                    data-instgrm-version="14"
+                    style={{ maxWidth: "100%", width: "100%", margin: "0 auto" }}
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {isMobile && (
+            <div className="flex justify-center gap-2 mt-4">
+              {snsPosts.map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => setSnsSlideIndex(i)}
+                  className={`h-2 rounded-full transition-all ${
+                    snsSlideIndex === i ? "bg-pink-500 w-8" : "bg-gray-300 w-2"
+                  }`}
+                  aria-label={`スライド ${i + 1}`}
+                />
+              ))}
+            </div>
+          )}
+
+          <div className="text-center mt-10">
+            <a
+              href="https://www.instagram.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-6 py-3 border border-pink-400 text-pink-600 rounded-full hover:bg-pink-50 transition-colors"
+            >
+              <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+              </svg>
+              <span>Instagramをフォローする</span>
+            </a>
+          </div>
         </div>
       </section>
     </>
