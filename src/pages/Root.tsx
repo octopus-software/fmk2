@@ -80,6 +80,12 @@ export default function Root() {
             >
               アクセス
             </Link>
+            <Link
+              to="/contact"
+              className="text-gray-700 hover:text-blue-600 transition-colors"
+            >
+              お問い合わせ
+            </Link>
           </nav>
           <nav
             className={`md:hidden overflow-hidden border-t border-gray-100 bg-white transition-all duration-300 ease-in-out ${
@@ -130,6 +136,13 @@ export default function Root() {
                 className="px-2 py-3 text-gray-700 hover:text-blue-600 hover:bg-gray-50 transition-colors"
               >
                 アクセス
+              </Link>
+              <Link
+                to="/contact"
+                onClick={closeMenu}
+                className="px-2 py-3 text-gray-700 hover:text-blue-600 hover:bg-gray-50 transition-colors"
+              >
+                お問い合わせ
               </Link>
             </div>
           </nav>

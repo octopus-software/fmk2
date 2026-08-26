@@ -18,10 +18,9 @@ export default function Sitemap() {
       title: "フロア案内",
       links: [
         { name: "フロアマップ　全体", path: "/floor-guide" },
-        { name: "フロアマップ　4階", path: "/floor-guide#4F" },
-        { name: "フロアマップ　3階", path: "/floor-guide#3F" },
-        { name: "フロアマップ　2階", path: "/floor-guide#2F" },
         { name: "フロアマップ　1階", path: "/floor-guide#1F" },
+        { name: "フロアマップ　2階", path: "/floor-guide#2F" },
+        { name: "フロアマップ　3階", path: "/floor-guide#3F" },
       ],
     },
     {
