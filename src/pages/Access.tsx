@@ -192,6 +192,7 @@ export default function Access() {
                 <div className="bg-gray-50 p-4 rounded-lg">
                   <h4 className="text-base font-medium mb-3 text-gray-800">ご利用料金</h4>
                   <p className="text-sm text-gray-700">・最初の2時間まで無料、以降12時間毎100円</p>
+                  <p className="text-sm text-gray-700">※自動二輪車は不可</p>
                 </div>
               </div>
             </div>
