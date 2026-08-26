@@ -7,7 +7,6 @@ import {
   Dog,
   Package,
 } from "lucide-react";
-import { ImageWithFallback } from "../components/figma/ImageWithFallback";
 import aboutMainImage from "figma:asset/images/about_main1.png";
 import aboutMainImage2 from "../assets/images/about_main2.png";
 import aboutMainImage3 from "../assets/images/about_main3.png";
@@ -68,8 +67,8 @@ export default function About() {
       </div>
 
       {/* フィールズ南柏とは？ */}
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="text-center mb-12">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-4">
+        <div className="text-center mb-8">
           <h2 className="text-3xl text-gray-900">
             地域の日常をもっと便利に、もっと快適に。
           </h2>
@@ -98,143 +97,81 @@ export default function About() {
         </div>
       </div>
 
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-12">
         {/* Page Subtitle */}
-        <div className="text-center mb-12">
+        <div className="text-center mb-10">
           <h2 className="text-3xl text-gray-900">
             館内サービスのご案内
           </h2>
         </div>
 
-        {/* Section 1: お子様をお連れのお客様 */}
-        <section className="bg-white rounded-lg shadow-lg overflow-hidden mb-8">
-          <div className="grid md:grid-cols-2 gap-0">
-            <div className="p-8 md:p-12 flex flex-col justify-center">
-              <div className="flex items-center gap-3 mb-6">
-                <Baby className="w-8 h-8 text-blue-600" />
-                <h2 className="text-2xl text-gray-900">
-                  お子様をお連れのお客様
-                </h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* お子様をお連れのお客様 */}
+          <div className="bg-white rounded-lg shadow p-6">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-12 h-12 bg-blue-50 rounded-full flex items-center justify-center shrink-0">
+                <Baby className="w-6 h-6 text-blue-600" />
+              </div>
+              <h3 className="text-lg font-medium text-gray-900">お子様をお連れのお客様</h3>
+            </div>
+            <div className="space-y-3 text-gray-600">
+              <div>
+                <p className="font-medium text-gray-800 mb-1">おむつの交換</p>
+                <p className="text-sm">トイレに収納式おむつ交換台をご用意いたしております。</p>
+              </div>
+            </div>
+          </div>
+
+          {/* お体の不自由なお客様 */}
+          <div className="bg-white rounded-lg shadow p-6">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-12 h-12 bg-green-50 rounded-full flex items-center justify-center shrink-0">
+                <Accessibility className="w-6 h-6 text-green-600" />
+              </div>
+              <h3 className="text-lg font-medium text-gray-900">お体の不自由なお客様</h3>
+            </div>
+            <div className="space-y-3 text-gray-600">
+              <div>
+                <p className="font-medium text-gray-800 mb-1">専用駐車場</p>
+                <p className="text-sm">駐車場各フロアエレベーター入口脇に専用駐車スペースがございます。</p>
               </div>
               <div>
-                <h3 className="text-xl mb-3 text-gray-900">
-                  おむつの交換
-                </h3>
-                <p className="text-lg text-gray-700">
-                  トイレに収納式おむつ交換台をご用意いたしております。
-                </p>
+                <p className="font-medium text-gray-800 mb-1">多目的トイレ</p>
+                <p className="text-sm">お身体のご不自由な方、お年寄りの方、妊娠中や乳幼児連れのお客様のためのトイレです。</p>
               </div>
             </div>
-            <div className="h-full">
-              <ImageWithFallback
-                src="https://images.unsplash.com/photo-1555252333-9f8e92e65df9?w=800&h=400&fit=crop"
-                alt="お子様向け設備"
-                className="w-full h-full object-cover min-h-[300px]"
-              />
-            </div>
           </div>
-        </section>
 
-        {/* Section 3: お体の不自由なお客様 */}
-        <section className="bg-white rounded-lg shadow-lg overflow-hidden mb-8">
-          <div className="grid md:grid-cols-2 gap-0">
-            <div className="h-full order-2 md:order-none">
-              <ImageWithFallback
-                src="https://images.unsplash.com/photo-1581594693702-fbdc51b2763b?w=800&h=400&fit=crop"
-                alt="バリアフリー設備"
-                className="w-full h-full object-cover min-h-[300px]"
-              />
+          {/* ペットをお連れのお客様 */}
+          <div className="bg-white rounded-lg shadow p-6">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-12 h-12 bg-orange-50 rounded-full flex items-center justify-center shrink-0">
+                <Dog className="w-6 h-6 text-orange-600" />
+              </div>
+              <h3 className="text-lg font-medium text-gray-900">ペットをお連れのお客様</h3>
             </div>
-            <div className="p-8 md:p-12 flex flex-col justify-center">
-              <div className="flex items-center gap-3 mb-6">
-                <Accessibility className="w-8 h-8 text-green-600" />
-                <h2 className="text-2xl text-gray-900">
-                  お体の不自由なお客様
-                </h2>
-              </div>
-              <div className="space-y-6">
-                <div>
-                  <h3 className="text-xl mb-3 text-gray-900">
-                    専用駐車場
-                  </h3>
-                  <p className="text-lg text-gray-700">
-                    駐車場各フロアエレベーター入口脇に専用駐車スペースがございます。
-                  </p>
-                </div>
-                <div>
-                  <h3 className="text-xl mb-3 text-gray-900">
-                    多目的トイレ
-                  </h3>
-                  <p className="text-lg text-gray-700">
-                    お身体のご不自由な方、お年寄りの方、妊娠中や乳幼児連れのお客様のためのトイレです。
-                  </p>
-                </div>
-              </div>
+            <div className="space-y-3 text-gray-600">
+              <p className="text-sm">館内へのペットの同伴はできません。</p>
+              <p className="text-sm">補助犬につきましては、館内へのご入店が可能です。</p>
             </div>
           </div>
-        </section>
 
-        {/* Section 4: ペットをお連れのお客様 */}
-        <section className="bg-white rounded-lg shadow-lg overflow-hidden mb-8">
-          <div className="grid md:grid-cols-2 gap-0">
-            <div className="p-8 md:p-12 flex flex-col justify-center">
-              <div className="flex items-center gap-3 mb-6">
-                <Dog className="w-8 h-8 text-orange-600" />
-                <h2 className="text-2xl text-gray-900">
-                  ペットをお連れのお客様
-                </h2>
+          {/* その他のサービス */}
+          <div className="bg-white rounded-lg shadow p-6">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-12 h-12 bg-purple-50 rounded-full flex items-center justify-center shrink-0">
+                <Package className="w-6 h-6 text-purple-600" />
               </div>
-              <div className="space-y-4">
-                <p className="text-lg text-gray-700">
-                  館内へのペットの同伴はできません。
-                </p>
-                <p className="text-lg text-gray-700">
-                  補助犬につきましては、館内へのご入店が可能です。
-                </p>
-              </div>
+              <h3 className="text-lg font-medium text-gray-900">その他のサービス</h3>
             </div>
-            <div className="h-full">
-              <ImageWithFallback
-                src="https://images.unsplash.com/photo-1548199973-03cce0bbc87b?w=800&h=400&fit=crop"
-                alt="ペット同伴について"
-                className="w-full h-full object-cover min-h-[300px]"
-              />
-            </div>
-          </div>
-        </section>
-
-        {/* Section 5: その他のサービス */}
-        <section className="bg-white rounded-lg shadow-lg overflow-hidden mb-8">
-          <div className="grid md:grid-cols-2 gap-0">
-            <div className="h-full order-2 md:order-none">
-              <ImageWithFallback
-                src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&h=400&fit=crop"
-                alt="その他のサービス"
-                className="w-full h-full object-cover min-h-[300px]"
-              />
-            </div>
-            <div className="p-8 md:p-12 flex flex-col justify-center">
-              <div className="flex items-center gap-3 mb-6">
-                <Package className="w-8 h-8 text-purple-600" />
-                <h2 className="text-2xl text-gray-900">
-                  その他のサービス
-                </h2>
-              </div>
-              <div className="space-y-6">
-                <div>
-                  <h3 className="text-xl mb-3 text-gray-900">
-                    駐車場事前精算機
-                  </h3>
-                  <div className="bg-gray-50 p-4 rounded-lg">
-                    <p className="text-lg text-gray-800">
-                      モール２-４階　連絡通路前にございます。
-                    </p>
-                  </div>
-                </div>
+            <div className="space-y-3 text-gray-600">
+              <div>
+                <p className="font-medium text-gray-800 mb-1">駐車場事前精算機</p>
+                <p className="text-sm">モール２-４階　連絡通路前にございます。</p>
               </div>
             </div>
           </div>
-        </section>
+        </div>
 
         {/* Back Button */}
         <div className="mt-12 text-center">

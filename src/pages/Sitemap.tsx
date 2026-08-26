@@ -81,39 +81,37 @@ export default function Sitemap() {
       </div>
 
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="bg-white rounded-lg shadow-lg overflow-hidden p-8 md:p-12">
-          <div className="space-y-8">
-            {sitemapSections.map((section, index) => (
-              <div key={index}>
-                <h2 className="text-2xl mb-4 text-gray-900 border-b border-gray-200 pb-2">
-                  {section.title}
-                </h2>
-                <ul className="space-y-3">
-                  {section.links.map((link, linkIndex) => (
-                    <li key={linkIndex}>
-                      <Link
-                        to={link.path}
-                        className="flex items-center gap-2 text-lg text-blue-600 hover:text-blue-700 hover:underline transition-colors"
-                      >
-                        <ChevronRight className="w-4 h-4" />
-                        <span>{link.name}</span>
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </div>
+        <div className="space-y-8">
+          {sitemapSections.map((section, index) => (
+            <div key={index}>
+              <h2 className="text-lg md:text-2xl mb-4 text-gray-900 border-b border-gray-200 pb-2">
+                {section.title}
+              </h2>
+              <ul className="space-y-3">
+                {section.links.map((link, linkIndex) => (
+                  <li key={linkIndex}>
+                    <Link
+                      to={link.path}
+                      className="flex items-center gap-2 text-sm md:text-base text-blue-600 hover:text-blue-700 hover:underline transition-colors"
+                    >
+                      <ChevronRight className="w-4 h-4" />
+                      <span>{link.name}</span>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
 
-          {/* Back to Home */}
-          <div className="mt-12 pt-8 border-t border-gray-200 text-center">
-            <Link
-              to="/"
-              className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 transition-colors"
-            >
-              <span>ホームに戻る</span>
-            </Link>
-          </div>
+        {/* Back to Home */}
+        <div className="mt-12 pt-8 border-t border-gray-200 text-center">
+          <Link
+            to="/"
+            className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 transition-colors"
+          >
+            <span>ホームに戻る</span>
+          </Link>
         </div>
       </div>
     </div>

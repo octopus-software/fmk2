@@ -107,7 +107,7 @@ export default function FloorGuide() {
             <section
               key={floor.id}
               id={floor.id}
-              className="bg-white rounded-lg shadow-lg overflow-hidden mb-8"
+              className="bg-white border border-gray-200 overflow-hidden mb-6"
             >
               {/* Floor Header */}
               <div className="bg-gray-100 p-3 md:p-6 border-b border-gray-200">

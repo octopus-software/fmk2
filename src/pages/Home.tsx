@@ -303,11 +303,15 @@ export default function Home() {
       <section className="bg-white pt-16 pb-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <h2 className="text-4xl mb-2 uppercase tracking-wider">
+            <h2 className="text-4xl mb-3 uppercase tracking-wider">
               PICK UP !!
             </h2>
-            <span className="block mx-auto mb-3 w-12 h-0.5 bg-orange-500 rounded-full"></span>
-            <p className="text-sm text-gray-600">
+            <div className="flex items-center justify-center gap-2 mb-3">
+              <span className="block w-10 h-px bg-orange-400"></span>
+              <span className="text-orange-400 text-[10px]">◆</span>
+              <span className="block w-10 h-px bg-orange-400"></span>
+            </div>
+            <p className="text-sm tracking-widest text-gray-500">
               ピックアップ
             </p>
           </div>
@@ -457,14 +461,18 @@ export default function Home() {
       </section>
 
       {/* News Section */}
-      <section className="bg-white py-8">
+      <section className="bg-gray-50 py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-8">
-            <h2 className="text-4xl mb-2 uppercase tracking-wider">
+            <h2 className="text-4xl mb-3 uppercase tracking-wider">
               NEWS
             </h2>
-            <span className="block mx-auto mb-3 w-12 h-0.5 bg-blue-600 rounded-full"></span>
-            <p className="text-sm text-gray-600">最新のお知らせや施設情報をご案内します</p>
+            <div className="flex items-center justify-center gap-2 mb-3">
+              <span className="block w-10 h-px bg-blue-500"></span>
+              <span className="text-blue-500 text-[10px]">◆</span>
+              <span className="block w-10 h-px bg-blue-500"></span>
+            </div>
+            <p className="text-sm tracking-widest text-gray-500">最新のお知らせや施設情報をご案内します</p>
           </div>
 
           {/* APIから取得したニュース */}
@@ -497,13 +505,12 @@ export default function Home() {
             </div>
           ) : null}
 
-          <div className="text-center mt-8">
+          <div className="text-center mt-10">
             <Link
               to="/news"
-              className="inline-flex items-center gap-2 text-gray-700 hover:text-gray-900 transition-all hover:gap-3"
+              className="inline-flex items-center gap-2 px-8 py-2.5 border border-gray-400 rounded-full text-sm tracking-widest text-gray-700 hover:bg-white transition-colors uppercase"
             >
-              <span className="transition-transform">▶︎</span>
-              <span>MORE</span>
+              More
             </Link>
           </div>
         </div>
@@ -513,11 +520,15 @@ export default function Home() {
       <section id="events" className="bg-white py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-4xl mb-2 uppercase tracking-wider">
+            <h2 className="text-4xl mb-3 uppercase tracking-wider">
               EVENT
             </h2>
-            <span className="block mx-auto mb-3 w-12 h-0.5 bg-purple-600 rounded-full"></span>
-            <p className="text-sm text-gray-600">季節のイベントや楽しい催しをご紹介します</p>
+            <div className="flex items-center justify-center gap-2 mb-3">
+              <span className="block w-10 h-px bg-purple-500"></span>
+              <span className="text-purple-500 text-[10px]">◆</span>
+              <span className="block w-10 h-px bg-purple-500"></span>
+            </div>
+            <p className="text-sm tracking-widest text-gray-500">季節のイベントや楽しい催しをご紹介します</p>
           </div>
 
           {eventsApiError && (
@@ -562,13 +573,12 @@ export default function Home() {
             <div className="text-gray-600 text-center mt-4">イベントはありません</div>
           )}
 
-          <div className="text-center mt-8">
+          <div className="text-center mt-10">
             <Link
               to="/events"
-              className="inline-flex items-center gap-2 text-gray-700 hover:text-gray-900 transition-all hover:gap-3"
+              className="inline-flex items-center gap-2 px-8 py-2.5 border border-gray-400 rounded-full text-sm tracking-widest text-gray-700 hover:bg-gray-50 transition-colors uppercase"
             >
-              <span className="transition-transform">▶︎</span>
-              <span>MORE</span>
+              More
             </Link>
           </div>
         </div>
@@ -578,9 +588,13 @@ export default function Home() {
       <section id="floor" className="py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-4xl mb-2">店舗を探す</h2>
-            <span className="block mx-auto mb-4 w-12 h-0.5 bg-indigo-600 rounded-full"></span>
-            <p className="text-lg text-gray-600">
+            <h2 className="text-4xl mb-3">店舗を探す</h2>
+            <div className="flex items-center justify-center gap-2 mb-3">
+              <span className="block w-10 h-px bg-indigo-500"></span>
+              <span className="text-indigo-500 text-[10px]">◆</span>
+              <span className="block w-10 h-px bg-indigo-500"></span>
+            </div>
+            <p className="text-sm tracking-widest text-gray-500">
               カテゴリから店舗を検索できます
             </p>
           </div>
@@ -892,9 +906,13 @@ export default function Home() {
       <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-10">
-            <h2 className="text-4xl mb-2 uppercase tracking-wider">SNS</h2>
-            <span className="block mx-auto mb-3 w-12 h-0.5 bg-pink-500 rounded-full"></span>
-            <p className="text-sm text-gray-600">インスタグラム</p>
+            <h2 className="text-4xl mb-3 uppercase tracking-wider">SNS</h2>
+            <div className="flex items-center justify-center gap-2 mb-3">
+              <span className="block w-10 h-px bg-pink-400"></span>
+              <span className="text-pink-400 text-[10px]">◆</span>
+              <span className="block w-10 h-px bg-pink-400"></span>
+            </div>
+            <p className="text-sm tracking-widest text-gray-500">インスタグラム</p>
           </div>
 
           {/* PC: 常に3スロット固定 */}
