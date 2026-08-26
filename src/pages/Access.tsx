@@ -9,6 +9,7 @@ import {
 import { ImageWithFallback } from "../components/figma/ImageWithFallback";
 import trainRosenImage from "../assets/images/train-rosen.gif";
 import parkingImage from "../assets/images/parking.jpg";
+import waribikiImage from "../assets/images/waribiki.jpg";
 
 export default function Access() {
   return (
@@ -135,6 +136,20 @@ export default function Access() {
                     className="w-full h-auto rounded-lg"
                   />
                 </div>
+                <div className="mt-4">
+                  <h3 className="text-base mb-2 text-gray-900 font-medium">
+                    割引きサービスのご利用方法
+                  </h3>
+                  <ImageWithFallback
+                      src={waribikiImage}
+                      alt="駐車場"
+                      className="w-full h-auto rounded-lg"
+                  />
+                  <p className="text-xs mt-4 text-gray-700">
+                    ■ 事前精算機はモールⅡ 4階～6階のエレベーター前、4階連絡通路手前にございます<br/>
+                    ■ お支払いは、現金（紙幣は千円札のみ）、各種キャッシュレス決済
+                  </p>
+                </div>
               </div>
               <div>
                 <div>
@@ -158,25 +173,34 @@ export default function Access() {
                         ご利用料金
                       </h4>
                       <p className="text-lg text-gray-700 mb-3">
-                        60分　300円
+                        60分　200円
                       </p>
                       <div className="space-y-1 text-sm text-gray-600">
-                        <p>※入庫後2時間は無料です</p>
+                        <p>※入庫後より料金が発生いたします。</p>
                         <p>
-                          ※2時間を超えた場合は通常料金が加算されます。
-                        </p>
-                        <p>
-                          ※お買物されなくても平日・休日ともに営業時間内最大1,000円でご利用になれます。
+                          ※お買物されなくても平日・休日ともに営業時間内最大900円でご利用になれます。
                         </p>
                         <p>
                           ※営業時間外（24:30～翌700）に駐車した場合は通常料金が加算されます。
                         </p>
                       </div>
                     </div>
-                    <div className="pt-2">
-                      <p className="text-sm text-gray-500">
-                        ※店舗ごとの駐車サービス（お買い物割引サービス）は、しばらくの間ございません。
+                    <div className="bg-gray-50 p-4 rounded-lg">
+                      <h4 className="text-base mb-3 text-gray-800">
+                        店舗ごとの駐車サービス
+                      </h4>
+                      <p className="text-lg text-gray-700 mb-3">
+                        <span className="text-sm">500円以上2,000円未満のお買い物</span><br/>1時間 無料（1時間分のサービス券）
                       </p>
+                      <p className="text-lg text-gray-700 mb-3">
+                        <span className="text-sm">2,000円以上のお買い物</span><br/>2時間 無料（2時間分のサービス券）
+                      </p>
+                      <div className="space-y-1 text-sm text-gray-600">
+                        <p>※サービス券は各店舗のレジ係員より受け取ってください。</p>
+                        <p>
+                          ※1店舗500円以上のお買上げで合計３店舗まで最大3時間まで無料。（３時間を超えた場合は通常料金が加算されます。）
+                        </p>
+                      </div>
                     </div>
                     <div className="bg-gray-50 p-4 rounded-lg">
                       <h4 className="text-sm mb-2 text-gray-800">
