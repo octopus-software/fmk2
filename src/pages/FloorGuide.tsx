@@ -14,28 +14,10 @@ export default function FloorGuide() {
 
   const floors = [
     {
-      id: "6F",
-      name: "6F",
-      description: "レストラン・カフェ",
-      color: "bg-yellow-100 text-yellow-600",
-    },
-    {
-      id: "5F",
-      name: "5F",
-      description: "エンターテインメント",
-      color: "bg-purple-100 text-purple-600",
-    },
-    {
-      id: "4F",
-      name: "4F",
-      description: "書籍・家電・雑貨・フィットネス",
-      color: "bg-pink-100 text-pink-600",
-    },
-    {
-      id: "3F",
-      name: "3F",
-      description: "レストラン・カフェ",
-      color: "bg-green-100 text-green-600",
+      id: "1F",
+      name: "1F",
+      description: "食品・日用品・サービス",
+      color: "bg-blue-100 text-blue-600",
     },
     {
       id: "2F",
@@ -44,10 +26,10 @@ export default function FloorGuide() {
       color: "bg-orange-100 text-orange-600",
     },
     {
-      id: "1F",
-      name: "1F",
-      description: "食品・日用品・サービス",
-      color: "bg-blue-100 text-blue-600",
+      id: "3F",
+      name: "3F",
+      description: "レストラン・カフェ",
+      color: "bg-green-100 text-green-600",
     },
   ];
 

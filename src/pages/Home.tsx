@@ -57,8 +57,6 @@ const isEventVisibleNow = (event: EventApiItem, now: Date) =>
   );
 
 export default function Home() {
-  const [selectedCategory, setSelectedCategory] =
-    useState("all");
   const [isTransitioning, setIsTransitioning] = useState(true);
   const [heroSlideIndex, setHeroSlideIndex] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
@@ -231,6 +229,8 @@ export default function Home() {
     setHeroSlideIndex((prev) => prev - 1);
   };
 
+  const [selectedCategory, setSelectedCategory] = useState("all");
+
   const categories = [
     { id: "all", name: "すべて", icon: Store },
     { id: "fashion", name: "ファッション", icon: ShoppingBag },
@@ -242,9 +242,7 @@ export default function Home() {
   const filteredShops =
     selectedCategory === "all"
       ? shopsItems
-      : shopsItems.filter(
-          (shop) => shop.category === selectedCategory,
-        );
+      : shopsItems.filter((shop) => shop.category === selectedCategory);
 
   return (
     <>
@@ -599,16 +597,15 @@ export default function Home() {
             </p>
           </div>
 
+
           {/* Category Filter */}
-          <div className="flex flex-wrap justify-center gap-3 mb-12">
+          <div className="flex flex-wrap justify-center gap-3 mb-10">
             {categories.map((category) => {
               const Icon = category.icon;
               return (
                 <button
                   key={category.id}
-                  onClick={() =>
-                    setSelectedCategory(category.id)
-                  }
+                  onClick={() => setSelectedCategory(category.id)}
                   className={`flex items-center gap-1 md:gap-2 px-3 md:px-6 py-1.5 md:py-3 rounded-full text-xs md:text-base transition-all ${
                     selectedCategory === category.id
                       ? "bg-blue-600 text-white shadow-lg scale-105"
@@ -622,281 +619,33 @@ export default function Home() {
             })}
           </div>
 
-          {/* Shop List */}
-          <div className="mb-6 text-center text-sm text-gray-600">
-            {filteredShops.length}件の店舗
-          </div>
-
           {filteredShops.length === 0 ? (
             <div className="text-center py-12 text-gray-500">
               該当する店舗が見つかりませんでした
             </div>
           ) : (
-            <div className="space-y-8">
-              {/* 5F Floor */}
-              {filteredShops.some(
-                (shop) => shop.floor === "5F",
-              ) && (
-                <div>
-                  <div className="flex items-center gap-2 mb-4">
-                    <div className="bg-purple-100 px-4 py-2 rounded">
-                      <span className="text-lg text-purple-600">
-                        5F
-                      </span>
-                    </div>
-                    <div>
-                      <h3 className="text-base">
-                        エンターテインメント
-                      </h3>
-                      <p className="text-xs text-gray-500">
-                        {
-                          filteredShops.filter(
-                            (shop) => shop.floor === "5F",
-                          ).length
-                        }
-                        店舗
-                      </p>
-                    </div>
+            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
+              {filteredShops.map((shop) => (
+                <Link
+                  key={shop.id}
+                  to={`/shops/${shop.id}`}
+                  className="relative block rounded-lg overflow-hidden shadow hover:shadow-lg transition-all group aspect-[4/5]"
+                >
+                  <ImageWithFallback
+                    src={shop.image}
+                    alt={shop.name}
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+                  <span className="absolute top-2 right-2 bg-black/40 text-white text-sm px-2.5 py-1 rounded">
+                    {shop.floor}
+                  </span>
+                  <div className="absolute bottom-0 left-0 right-0 p-3">
+                    <h4 className="text-sm font-medium text-white leading-snug">{shop.name}</h4>
+                    <p className="text-xs text-white/70 mt-0.5 line-clamp-1">{shop.description}</p>
                   </div>
-                  <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
-                    {filteredShops
-                      .filter((shop) => shop.floor === "5F")
-                      .map((shop) => (
-                        <Link
-                          key={shop.id}
-                          to={`/shops/${shop.id}`}
-                          className="bg-white rounded-lg p-3 shadow hover:shadow-md transition-all border-l-2 border-purple-500 block"
-                        >
-                          <h4 className="text-sm font-medium mb-2">
-                            {shop.name}
-                          </h4>
-                          <div className="w-full h-32 rounded overflow-hidden mb-2">
-                            <ImageWithFallback
-                              src={shop.image}
-                              alt={shop.name}
-                              className="w-full h-full object-cover"
-                            />
-                          </div>
-                          <p className="text-xs text-gray-500">
-                            {shop.description}
-                          </p>
-                        </Link>
-                      ))}
-                  </div>
-                </div>
-              )}
-
-              {/* 4F Floor */}
-              {filteredShops.some(
-                (shop) => shop.floor === "4F",
-              ) && (
-                <div>
-                  <div className="flex items-center gap-2 mb-4">
-                    <div className="bg-pink-100 px-4 py-2 rounded">
-                      <span className="text-lg text-pink-600">
-                        4F
-                      </span>
-                    </div>
-                    <div>
-                      <h3 className="text-base">
-                        書籍・家電・雑貨・フィットネス
-                      </h3>
-                      <p className="text-xs text-gray-500">
-                        {
-                          filteredShops.filter(
-                            (shop) => shop.floor === "4F",
-                          ).length
-                        }
-                        店舗
-                      </p>
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
-                    {filteredShops
-                      .filter((shop) => shop.floor === "4F")
-                      .map((shop) => (
-                        <Link
-                          key={shop.id}
-                          to={`/shops/${shop.id}`}
-                          className="bg-white rounded-lg p-3 shadow hover:shadow-md transition-all border-l-2 border-pink-500 block"
-                        >
-                          <h4 className="text-sm font-medium mb-2">
-                            {shop.name}
-                          </h4>
-                          <div className="w-full h-32 rounded overflow-hidden mb-2">
-                            <ImageWithFallback
-                              src={shop.image}
-                              alt={shop.name}
-                              className="w-full h-full object-cover"
-                            />
-                          </div>
-                          <p className="text-xs text-gray-500">
-                            {shop.description}
-                          </p>
-                        </Link>
-                      ))}
-                  </div>
-                </div>
-              )}
-
-              {/* 3F Floor */}
-              {filteredShops.some(
-                (shop) => shop.floor === "3F",
-              ) && (
-                <div>
-                  <div className="flex items-center gap-2 mb-4">
-                    <div className="bg-green-100 px-4 py-2 rounded">
-                      <span className="text-lg text-green-600">
-                        3F
-                      </span>
-                    </div>
-                    <div>
-                      <h3 className="text-base">
-                        レストラン・カフェ
-                      </h3>
-                      <p className="text-xs text-gray-500">
-                        {
-                          filteredShops.filter(
-                            (shop) => shop.floor === "3F",
-                          ).length
-                        }
-                        店舗
-                      </p>
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
-                    {filteredShops
-                      .filter((shop) => shop.floor === "3F")
-                      .map((shop) => (
-                        <Link
-                          key={shop.id}
-                          to={`/shops/${shop.id}`}
-                          className="bg-white rounded-lg p-3 shadow hover:shadow-md transition-all border-l-2 border-green-500 block"
-                        >
-                          <h4 className="text-sm font-medium mb-2">
-                            {shop.name}
-                          </h4>
-                          <div className="w-full h-32 rounded overflow-hidden mb-2">
-                            <ImageWithFallback
-                              src={shop.image}
-                              alt={shop.name}
-                              className="w-full h-full object-cover"
-                            />
-                          </div>
-                          <p className="text-xs text-gray-500">
-                            {shop.description}
-                          </p>
-                        </Link>
-                      ))}
-                  </div>
-                </div>
-              )}
-
-              {/* 2F Floor */}
-              {filteredShops.some(
-                (shop) => shop.floor === "2F",
-              ) && (
-                <div>
-                  <div className="flex items-center gap-2 mb-4">
-                    <div className="bg-orange-100 px-4 py-2 rounded">
-                      <span className="text-lg text-orange-600">
-                        2F
-                      </span>
-                    </div>
-                    <div>
-                      <h3 className="text-base">
-                        ファッション・雑貨・サービス
-                      </h3>
-                      <p className="text-xs text-gray-500">
-                        {
-                          filteredShops.filter(
-                            (shop) => shop.floor === "2F",
-                          ).length
-                        }
-                        店舗
-                      </p>
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
-                    {filteredShops
-                      .filter((shop) => shop.floor === "2F")
-                      .map((shop) => (
-                        <Link
-                          key={shop.id}
-                          to={`/shops/${shop.id}`}
-                          className="bg-white rounded-lg p-3 shadow hover:shadow-md transition-all border-l-2 border-orange-500 block"
-                        >
-                          <h4 className="text-sm font-medium mb-2">
-                            {shop.name}
-                          </h4>
-                          <div className="w-full h-32 rounded overflow-hidden mb-2">
-                            <ImageWithFallback
-                              src={shop.image}
-                              alt={shop.name}
-                              className="w-full h-full object-cover"
-                            />
-                          </div>
-                          <p className="text-xs text-gray-500">
-                            {shop.description}
-                          </p>
-                        </Link>
-                      ))}
-                  </div>
-                </div>
-              )}
-
-              {/* 1F Floor */}
-              {filteredShops.some(
-                (shop) => shop.floor === "1F",
-              ) && (
-                <div>
-                  <div className="flex items-center gap-2 mb-4">
-                    <div className="bg-blue-100 px-4 py-2 rounded">
-                      <span className="text-lg text-blue-600">
-                        1F
-                      </span>
-                    </div>
-                    <div>
-                      <h3 className="text-base">
-                        食品・日用品・サービス
-                      </h3>
-                      <p className="text-xs text-gray-500">
-                        {
-                          filteredShops.filter(
-                            (shop) => shop.floor === "1F",
-                          ).length
-                        }
-                        店舗
-                      </p>
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
-                    {filteredShops
-                      .filter((shop) => shop.floor === "1F")
-                      .map((shop) => (
-                        <Link
-                          key={shop.id}
-                          to={`/shops/${shop.id}`}
-                          className="bg-white rounded-lg p-3 shadow hover:shadow-md transition-all border-l-2 border-blue-500 block"
-                        >
-                          <h4 className="text-sm font-medium mb-2">
-                            {shop.name}
-                          </h4>
-                          <div className="w-full h-32 rounded overflow-hidden mb-2">
-                            <ImageWithFallback
-                              src={shop.image}
-                              alt={shop.name}
-                              className="w-full h-full object-cover"
-                            />
-                          </div>
-                          <p className="text-xs text-gray-500">
-                            {shop.description}
-                          </p>
-                        </Link>
-                      ))}
-                  </div>
-                </div>
-              )}
+                </Link>
+              ))}
             </div>
           )}
         </div>
