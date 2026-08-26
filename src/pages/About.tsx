@@ -3,7 +3,6 @@ import { useState, useEffect } from "react";
 import {
   ArrowLeft,
   Baby,
-  Heart,
   Accessibility,
   Dog,
   Package,
@@ -136,40 +135,16 @@ export default function About() {
           </div>
         </section>
 
-        {/* Section 2: AED */}
+        {/* Section 3: お体の不自由なお客様 */}
         <section className="bg-white rounded-lg shadow-lg overflow-hidden mb-8">
           <div className="grid md:grid-cols-2 gap-0">
             <div className="h-full order-2 md:order-none">
               <ImageWithFallback
-                src="https://images.unsplash.com/photo-1516574187841-cb9cc2ca948b?w=800&h=400&fit=crop"
-                alt="AED設置場所"
+                src="https://images.unsplash.com/photo-1581594693702-fbdc51b2763b?w=800&h=400&fit=crop"
+                alt="バリアフリー設備"
                 className="w-full h-full object-cover min-h-[300px]"
               />
             </div>
-            <div className="p-8 md:p-12 flex flex-col justify-center">
-              <div className="flex items-center gap-3 mb-6">
-                <Heart className="w-8 h-8 text-red-600" />
-                <h2 className="text-2xl text-gray-900">
-                  AED（自動体外式除細動器）のご案内
-                </h2>
-              </div>
-              <div>
-                <p className="text-lg text-gray-700 mb-3">
-                  館内下記の場所に設置しております。
-                </p>
-                <div className="bg-gray-50 p-4 rounded-lg">
-                  <p className="text-lg text-gray-800">
-                    モール１-１階 マツモトキヨシ内
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Section 3: お体の不自由なお客様 */}
-        <section className="bg-white rounded-lg shadow-lg overflow-hidden mb-8">
-          <div className="grid md:grid-cols-2 gap-0">
             <div className="p-8 md:p-12 flex flex-col justify-center">
               <div className="flex items-center gap-3 mb-6">
                 <Accessibility className="w-8 h-8 text-green-600" />
@@ -190,23 +165,11 @@ export default function About() {
                   <h3 className="text-xl mb-3 text-gray-900">
                     多目的トイレ
                   </h3>
-                  <p className="text-lg text-gray-700 mb-3">
+                  <p className="text-lg text-gray-700">
                     お身体のご不自由な方、お年寄りの方、妊娠中や乳幼児連れのお客様のためのトイレです。
                   </p>
-                  <div className="bg-gray-50 p-4 rounded-lg">
-                    <p className="text-lg text-gray-800">
-                      モール１-３階、モール２-１階にございます。
-                    </p>
-                  </div>
                 </div>
               </div>
-            </div>
-            <div className="h-full">
-              <ImageWithFallback
-                src="https://images.unsplash.com/photo-1581594693702-fbdc51b2763b?w=800&h=400&fit=crop"
-                alt="バリアフリー設備"
-                className="w-full h-full object-cover min-h-[300px]"
-              />
             </div>
           </div>
         </section>
@@ -214,13 +177,6 @@ export default function About() {
         {/* Section 4: ペットをお連れのお客様 */}
         <section className="bg-white rounded-lg shadow-lg overflow-hidden mb-8">
           <div className="grid md:grid-cols-2 gap-0">
-            <div className="h-full order-2 md:order-none">
-              <ImageWithFallback
-                src="https://images.unsplash.com/photo-1548199973-03cce0bbc87b?w=800&h=400&fit=crop"
-                alt="ペット同伴について"
-                className="w-full h-full object-cover min-h-[300px]"
-              />
-            </div>
             <div className="p-8 md:p-12 flex flex-col justify-center">
               <div className="flex items-center gap-3 mb-6">
                 <Dog className="w-8 h-8 text-orange-600" />
@@ -237,12 +193,26 @@ export default function About() {
                 </p>
               </div>
             </div>
+            <div className="h-full">
+              <ImageWithFallback
+                src="https://images.unsplash.com/photo-1548199973-03cce0bbc87b?w=800&h=400&fit=crop"
+                alt="ペット同伴について"
+                className="w-full h-full object-cover min-h-[300px]"
+              />
+            </div>
           </div>
         </section>
 
         {/* Section 5: その他のサービス */}
         <section className="bg-white rounded-lg shadow-lg overflow-hidden mb-8">
           <div className="grid md:grid-cols-2 gap-0">
+            <div className="h-full order-2 md:order-none">
+              <ImageWithFallback
+                src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&h=400&fit=crop"
+                alt="その他のサービス"
+                className="w-full h-full object-cover min-h-[300px]"
+              />
+            </div>
             <div className="p-8 md:p-12 flex flex-col justify-center">
               <div className="flex items-center gap-3 mb-6">
                 <Package className="w-8 h-8 text-purple-600" />
@@ -251,16 +221,6 @@ export default function About() {
                 </h2>
               </div>
               <div className="space-y-6">
-                <div>
-                  <h3 className="text-xl mb-3 text-gray-900">
-                    コインロッカー
-                  </h3>
-                  <div className="bg-gray-50 p-4 rounded-lg">
-                    <p className="text-lg text-gray-800">
-                      モール１-１階エントランスにございます。
-                    </p>
-                  </div>
-                </div>
                 <div>
                   <h3 className="text-xl mb-3 text-gray-900">
                     駐車場事前精算機
@@ -272,13 +232,6 @@ export default function About() {
                   </div>
                 </div>
               </div>
-            </div>
-            <div className="h-full">
-              <ImageWithFallback
-                src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&h=400&fit=crop"
-                alt="その他のサービス"
-                className="w-full h-full object-cover min-h-[300px]"
-              />
             </div>
           </div>
         </section>
