@@ -160,7 +160,7 @@ export default function Access() {
                     <div className="bg-gray-50 p-4 rounded-lg">
                       <h4 className="text-sm mb-2 text-gray-800">駐車制限</h4>
                       <p className="text-sm text-gray-700">高さ 2.3m未満 長さ 5.0m未満 幅 1.9m未満 重量 2.0t未満</p>
-                      <p className="text-xs text-gray-600 mt-2">※二輪車は不可</p>
+                      <p className="text-xs text-gray-600 mt-2">※自動二輪車は不可</p>
                     </div>
                     <div className="bg-gray-50 p-4 rounded-lg">
                       <h4 className="text-sm mb-2 text-gray-800">駐車場運営会社</h4>
