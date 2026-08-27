@@ -16,19 +16,16 @@ export default function FloorGuide() {
     {
       id: "1F",
       name: "1F",
-      description: "食品・日用品・サービス",
       color: "bg-blue-100 text-blue-600",
     },
     {
       id: "2F",
       name: "2F",
-      description: "ファッション・雑貨・サービス",
       color: "bg-orange-100 text-orange-600",
     },
     {
       id: "3F",
       name: "3F",
-      description: "レストラン・カフェ",
       color: "bg-green-100 text-green-600",
     },
   ];
@@ -92,23 +89,14 @@ export default function FloorGuide() {
               className="bg-white border border-gray-200 overflow-hidden mb-6"
             >
               {/* Floor Header */}
-              <div className="bg-gray-100 p-3 md:p-6 border-b border-gray-200">
-                <div className="flex flex-col items-start gap-3 md:flex-row md:items-center md:gap-4">
-                  <div
-                    className={`${floor.color} px-6 py-3 rounded-lg`}
-                  >
+              <div className="bg-gray-100 px-4 py-3 md:px-6 md:py-4 border-b border-gray-200">
+                <div className="flex items-center gap-4">
+                  <div className={`${floor.color} px-6 py-2 rounded-lg`}>
                     <span className="text-lg md:text-xl font-bold">
                       {floor.name}
                     </span>
                   </div>
-                  <div>
-                    <h2 className="text-lg md:text-xl text-gray-900">
-                      {floor.description}
-                    </h2>
-                    <p className="text-sm text-gray-600 mt-1">
-                      {shops.length}店舗
-                    </p>
-                  </div>
+                  <p className="text-sm text-gray-600">{shops.length}店舗</p>
                 </div>
               </div>
 
