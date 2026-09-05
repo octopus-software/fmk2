@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://fields-mall2.jp/sitemap.xml
