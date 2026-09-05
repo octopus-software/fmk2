@@ -66,6 +66,7 @@ export default function Events() {
     <div className="bg-gray-50 min-h-screen">
       <Helmet>
         <title>イベント | フィールズ南柏</title>
+        <meta name="description" content="フィールズ南柏で開催中・開催予定のイベント情報をご紹介します。" />
       </Helmet>
       {/* Hero Section */}
       <section className="bg-gradient-to-r from-purple-600 to-purple-700 text-white py-16">

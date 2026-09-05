@@ -49,6 +49,7 @@ export default function FloorGuide() {
     <div className="bg-gray-50 min-h-screen">
       <Helmet>
         <title>フロア案内 | フィールズ南柏</title>
+        <meta name="description" content="フィールズ南柏のフロアマップです。1F・2F・3Fの店舗配置をご確認いただけます。" />
       </Helmet>
       {/* Hero Section */}
       <section className="bg-gradient-to-r from-indigo-600 to-indigo-700 text-white py-16">

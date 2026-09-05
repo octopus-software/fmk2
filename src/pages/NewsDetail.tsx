@@ -10,7 +10,7 @@ import {
 } from "@/features/news/api/fetchNews";
 import type { NewsApiItem } from "@/features/news/types/news";
 import { toTime } from "@/features/news/utils/date";
-import { htmlToText } from "@/features/news/utils/text";
+import { htmlToText, truncateText } from "@/features/news/utils/text";
 import { formatJpDate } from "@/lib/date";
 
 export default function NewsDetail() {
@@ -130,6 +130,7 @@ export default function NewsDetail() {
     <div className="bg-gray-50 min-h-screen text-sm md:text-base">
       <Helmet>
         <title>{htmlToText(newsItem.title?.rendered) || "お知らせ"} | フィールズ南柏</title>
+        <meta name="description" content={truncateText(htmlToText(newsItem.content?.rendered), 120)} />
       </Helmet>
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Breadcrumb */}

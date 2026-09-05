@@ -251,6 +251,7 @@ export default function Home() {
       {/* Welcome Section with Building Image */}
       <Helmet>
         <title>フィールズ南柏</title>
+        <meta name="description" content="フィールズ南柏は千葉県柏市のショッピングモールです。ファッション・グルメ・生活雑貨など多彩な店舗が揃っています。" />
       </Helmet>
       <section className="bg-white relative overflow-hidden">
         <div className="relative h-screen">

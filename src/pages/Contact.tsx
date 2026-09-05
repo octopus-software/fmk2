@@ -12,6 +12,7 @@ export default function Contact() {
     <div className="bg-gray-50 min-h-screen">
       <Helmet>
         <title>お問い合わせ | フィールズ南柏</title>
+        <meta name="description" content="フィールズ南柏へのお問い合わせページです。各店舗・モール管理室・出店に関するお問い合わせ先をご案内します。" />
       </Helmet>
       {/* Hero Section */}
       <section className="bg-gradient-to-r from-teal-600 to-teal-700 text-white py-16">

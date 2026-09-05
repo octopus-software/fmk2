@@ -33,6 +33,7 @@ export default function About() {
     <div className="bg-gray-50 min-h-screen">
       <Helmet>
         <title>館内サービス | フィールズ南柏</title>
+        <meta name="description" content="フィールズ南柏の館内サービスのご案内です。ベビールーム・バリアフリー・駐車場精算機など各種サービスをご紹介します。" />
       </Helmet>
       {/* Hero Section */}
       <section className="bg-gradient-to-r from-green-600 to-green-700 text-white py-16">

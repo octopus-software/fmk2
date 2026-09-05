@@ -6,7 +6,7 @@ import { ImageWithFallback } from "../components/figma/ImageWithFallback";
 import { fetchPickupById, fetchPickups } from "@/features/pickups/api/fetchPickups";
 import type { PickupApiItem } from "@/features/pickups/types/pickups";
 import { getPickupImageUrl, isPickupVisibleNow } from "@/features/pickups/utils/pickups";
-import { htmlToText } from "@/features/news/utils/text";
+import { htmlToText, truncateText } from "@/features/news/utils/text";
 
 export default function PickupDetail() {
   const { id } = useParams();
@@ -127,6 +127,7 @@ export default function PickupDetail() {
     <div className="bg-gray-50 min-h-screen">
       <Helmet>
         <title>{htmlToText(pickup.title?.rendered) || "ピックアップ"} | フィールズ南柏</title>
+        <meta name="description" content={truncateText(htmlToText(pickup.content?.rendered), 120)} />
       </Helmet>
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <nav className="mb-8">

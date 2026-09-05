@@ -74,6 +74,7 @@ export default function ShopDetail() {
     <div className="bg-gray-50 min-h-screen text-sm md:text-base">
       <Helmet>
         <title>{shop.name} | フィールズ南柏</title>
+        <meta name="description" content={shop.description} />
       </Helmet>
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Breadcrumb */}

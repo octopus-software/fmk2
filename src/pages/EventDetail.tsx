@@ -13,7 +13,7 @@ import {
   isEventNew,
 } from "@/features/events/utils/events";
 import type { EventApiItem } from "@/features/events/types/events";
-import { htmlToText } from "@/features/news/utils/text";
+import { htmlToText, truncateText } from "@/features/news/utils/text";
 import { parseWpDate, isWithinRange } from "@/lib/date";
 
 const isStarted = (item: EventApiItem, now: Date) =>
@@ -146,6 +146,7 @@ export default function EventDetail() {
     <div className="bg-gray-50 min-h-screen text-sm md:text-base">
       <Helmet>
         <title>{htmlToText(eventItem.title?.rendered) || "イベント"} | フィールズ南柏</title>
+        <meta name="description" content={truncateText(htmlToText(eventItem.content?.rendered), 120)} />
       </Helmet>
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Breadcrumb */}

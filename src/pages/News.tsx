@@ -60,6 +60,7 @@ export default function News() {
     <div className="bg-gray-50 min-h-screen text-sm md:text-base">
       <Helmet>
         <title>お知らせ | フィールズ南柏</title>
+        <meta name="description" content="フィールズ南柏からの最新のお知らせ・インフォメーションをご確認いただけます。" />
       </Helmet>
       {/* Hero Section */}
       <section className="bg-gradient-to-r from-blue-600 to-blue-700 text-white py-16">

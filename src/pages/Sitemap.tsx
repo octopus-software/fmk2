@@ -50,6 +50,7 @@ export default function Sitemap() {
     <div className="bg-gray-50 min-h-screen">
       <Helmet>
         <title>サイトマップ | フィールズ南柏</title>
+        <meta name="description" content="フィールズ南柏のサイトマップです。" />
       </Helmet>
       {/* Hero Section */}
       <section className="bg-gradient-to-r from-gray-600 to-gray-700 text-white py-16">

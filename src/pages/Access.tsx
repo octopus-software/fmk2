@@ -16,6 +16,7 @@ export default function Access() {
     <div className="bg-gray-50 min-h-screen">
       <Helmet>
         <title>アクセス | フィールズ南柏</title>
+        <meta name="description" content="フィールズ南柏へのアクセス情報です。JR常磐線南柏駅東口より徒歩1分。車・電車・駐輪場のご案内。" />
       </Helmet>
       {/* Hero Section */}
       <section className="bg-gradient-to-r from-orange-600 to-orange-700 text-white py-16">
