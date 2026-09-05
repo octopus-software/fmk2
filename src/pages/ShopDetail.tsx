@@ -2,6 +2,7 @@ import { useParams, Link } from "react-router";
 import { useEffect, useMemo, useState } from "react";
 import { MapPin, Clock, Phone, Globe, ArrowLeft, Tag } from "lucide-react";
 import { fetchShops } from "@/features/shops/api/fetchShops";
+import { getFloorColor } from "@/features/shops/utils/shops";
 import type { ShopItem } from "@/features/shops/types/shops";
 import { ImageWithFallback } from "../components/figma/ImageWithFallback";
 
@@ -68,17 +69,6 @@ export default function ShopDetail() {
     return categories[category] || category;
   };
 
-  const getFloorColor = (floor: string) => {
-    const colors: Record<string, string> = {
-      "1F": "bg-blue-100 text-blue-600",
-      "2F": "bg-orange-100 text-orange-600",
-      "3F": "bg-green-100 text-green-600",
-      "4F": "bg-pink-100 text-pink-600",
-      "5F": "bg-purple-100 text-purple-600",
-    };
-    return colors[floor] || "bg-gray-100 text-gray-600";
-  };
-
   return (
     <div className="bg-gray-50 min-h-screen text-sm md:text-base">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -103,7 +93,7 @@ export default function ShopDetail() {
 
         {/* Shop Header */}
         <div className="bg-white rounded-lg shadow-lg overflow-hidden mb-8">
-          <div className="relative h-64 md:h-80">
+          <div className="relative h-72 md:h-[28rem]">
             <ImageWithFallback
               src={shop.image}
               alt={shop.name}

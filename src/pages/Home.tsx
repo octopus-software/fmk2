@@ -11,6 +11,7 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router";
 import axios from "axios";
 import { fetchShops } from "@/features/shops/api/fetchShops";
+import { getFloorColor } from "@/features/shops/utils/shops";
 import type { ShopItem } from "@/features/shops/types/shops";
 import mainImage from "figma:asset/images/hero.png";
 import { fetchPickups } from "@/features/pickups/api/fetchPickups";
@@ -637,7 +638,7 @@ export default function Home() {
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
-                  <span className="absolute top-2 right-2 bg-black/40 text-white text-sm px-2.5 py-1 rounded">
+                  <span className={`absolute top-2 right-2 text-sm px-2.5 py-1 rounded font-medium ${getFloorColor(shop.floor)}`}>
                     {shop.floor}
                   </span>
                   <div className="absolute bottom-0 left-0 right-0 p-3">

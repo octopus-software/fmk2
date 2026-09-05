@@ -138,7 +138,7 @@ export default function PickupDetail() {
         </nav>
 
         <div className="bg-white rounded-lg shadow-lg overflow-hidden mb-8">
-          <div className="relative h-64 md:h-96">
+          <div className="relative h-64 md:h-[28rem]">
             <ImageWithFallback
               src={getPickupImageUrl(pickup)}
               alt={htmlToText(pickup.title?.rendered) || "ピックアップ画像"}

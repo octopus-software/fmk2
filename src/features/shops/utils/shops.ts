@@ -19,6 +19,17 @@ const normalizeFloor = (floor?: string): string => {
   return /^\d+$/.test(floor) ? `${floor}F` : floor;
 };
 
+export const getFloorColor = (floor: string): string => {
+  const colors: Record<string, string> = {
+    "1F": "bg-blue-100 text-blue-600",
+    "2F": "bg-orange-100 text-orange-600",
+    "3F": "bg-green-100 text-green-600",
+    "4F": "bg-pink-100 text-pink-600",
+    "5F": "bg-purple-100 text-purple-600",
+  };
+  return colors[floor] || "bg-gray-100 text-gray-600";
+};
+
 export const toShopItem = (item: ShopApiItem): ShopItem => ({
   id: item.id,
   name: item.acf?.name ?? item.title.rendered,

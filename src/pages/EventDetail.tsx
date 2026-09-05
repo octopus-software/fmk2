@@ -165,7 +165,7 @@ export default function EventDetail() {
 
         {/* Event Header */}
         <div className="bg-white rounded-lg shadow-lg overflow-hidden mb-8">
-          <div className="relative h-64 md:h-96">
+          <div className="relative h-64 md:h-[28rem]">
             {isEventNew(eventItem.acf?.publish_start_at ?? eventItem.date) && (
               <div className="absolute top-4 left-4 bg-red-600 text-white text-xs md:text-sm px-3 md:px-4 py-1.5 md:py-2 rounded z-10">
                 NEW

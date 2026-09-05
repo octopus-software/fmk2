@@ -1,1 +1,3 @@
-export const SNS_API_URL = "http://35.78.43.19/index.php?rest_route=/wp/v2/sns";
+import { API_BASE_URL } from "@/lib/api";
+
+export const SNS_API_URL = `${API_BASE_URL}/sns`;
