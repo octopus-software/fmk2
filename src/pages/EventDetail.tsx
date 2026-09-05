@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { useParams, Link } from "react-router";
+import { Helmet } from "react-helmet-async";
 import { Calendar, Clock, MapPin, Users, DollarSign, ArrowLeft } from "lucide-react";
 import { ImageWithFallback } from "../components/figma/ImageWithFallback";
 import { fetchEventById, fetchEvents } from "@/features/events/api/fetchEvents";
@@ -143,6 +144,9 @@ export default function EventDetail() {
 
   return (
     <div className="bg-gray-50 min-h-screen text-sm md:text-base">
+      <Helmet>
+        <title>{htmlToText(eventItem.title?.rendered) || "イベント"} | フィールズ南柏</title>
+      </Helmet>
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Breadcrumb */}
         <nav className="mb-8">

@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { Helmet } from "react-helmet-async";
 import { useParams, Link } from "react-router";
 import { Calendar, ArrowLeft } from "lucide-react";
 import {
@@ -127,6 +128,9 @@ export default function NewsDetail() {
 
   return (
     <div className="bg-gray-50 min-h-screen text-sm md:text-base">
+      <Helmet>
+        <title>{htmlToText(newsItem.title?.rendered) || "お知らせ"} | フィールズ南柏</title>
+      </Helmet>
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Breadcrumb */}
         <nav className="mb-8">

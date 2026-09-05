@@ -6,6 +6,7 @@ import {
   ChevronLeft,
   ChevronRight,
 } from "lucide-react";
+import { Helmet } from "react-helmet-async";
 import { ImageWithFallback } from "../components/figma/ImageWithFallback";
 import { useState, useEffect } from "react";
 import { Link } from "react-router";
@@ -248,6 +249,9 @@ export default function Home() {
   return (
     <>
       {/* Welcome Section with Building Image */}
+      <Helmet>
+        <title>フィールズ南柏</title>
+      </Helmet>
       <section className="bg-white relative overflow-hidden">
         <div className="relative h-screen">
           {/* Background Image */}

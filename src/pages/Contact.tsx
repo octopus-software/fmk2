@@ -1,4 +1,5 @@
 import { Link } from "react-router";
+import { Helmet } from "react-helmet-async";
 import {
   Phone,
   Store,
@@ -9,6 +10,9 @@ import {
 export default function Contact() {
   return (
     <div className="bg-gray-50 min-h-screen">
+      <Helmet>
+        <title>お問い合わせ | フィールズ南柏</title>
+      </Helmet>
       {/* Hero Section */}
       <section className="bg-gradient-to-r from-teal-600 to-teal-700 text-white py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

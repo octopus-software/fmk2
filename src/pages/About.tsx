@@ -1,5 +1,6 @@
 import { Link } from "react-router";
 import { useState, useEffect } from "react";
+import { Helmet } from "react-helmet-async";
 import {
   ArrowLeft,
   Baby,
@@ -30,6 +31,9 @@ export default function About() {
   }, [images.length]);
   return (
     <div className="bg-gray-50 min-h-screen">
+      <Helmet>
+        <title>館内サービス | フィールズ南柏</title>
+      </Helmet>
       {/* Hero Section */}
       <section className="bg-gradient-to-r from-green-600 to-green-700 text-white py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

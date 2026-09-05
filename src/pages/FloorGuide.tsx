@@ -1,4 +1,5 @@
 import { Link } from "react-router";
+import { Helmet } from "react-helmet-async";
 import { Building2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { fetchShops } from "@/features/shops/api/fetchShops";
@@ -46,6 +47,9 @@ export default function FloorGuide() {
 
   return (
     <div className="bg-gray-50 min-h-screen">
+      <Helmet>
+        <title>フロア案内 | フィールズ南柏</title>
+      </Helmet>
       {/* Hero Section */}
       <section className="bg-gradient-to-r from-indigo-600 to-indigo-700 text-white py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

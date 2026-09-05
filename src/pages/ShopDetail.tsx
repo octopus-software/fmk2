@@ -1,4 +1,5 @@
 import { useParams, Link } from "react-router";
+import { Helmet } from "react-helmet-async";
 import { useEffect, useMemo, useState } from "react";
 import { MapPin, Clock, Phone, Globe, ArrowLeft, Tag } from "lucide-react";
 import { fetchShops } from "@/features/shops/api/fetchShops";
@@ -71,6 +72,9 @@ export default function ShopDetail() {
 
   return (
     <div className="bg-gray-50 min-h-screen text-sm md:text-base">
+      <Helmet>
+        <title>{shop.name} | フィールズ南柏</title>
+      </Helmet>
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Breadcrumb */}
         <nav className="mb-8">

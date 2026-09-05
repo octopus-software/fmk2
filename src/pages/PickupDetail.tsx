@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useParams } from "react-router";
+import { Helmet } from "react-helmet-async";
 import { ArrowLeft, Calendar } from "lucide-react";
 import { ImageWithFallback } from "../components/figma/ImageWithFallback";
 import { fetchPickupById, fetchPickups } from "@/features/pickups/api/fetchPickups";
@@ -124,6 +125,9 @@ export default function PickupDetail() {
 
   return (
     <div className="bg-gray-50 min-h-screen">
+      <Helmet>
+        <title>{htmlToText(pickup.title?.rendered) || "ピックアップ"} | フィールズ南柏</title>
+      </Helmet>
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <nav className="mb-8">
           <ol className="flex items-center gap-2 text-sm text-gray-600">

@@ -1,4 +1,5 @@
 import { Link } from "react-router";
+import { Helmet } from "react-helmet-async";
 import { ChevronRight } from "lucide-react";
 
 export default function Sitemap() {
@@ -47,6 +48,9 @@ export default function Sitemap() {
 
   return (
     <div className="bg-gray-50 min-h-screen">
+      <Helmet>
+        <title>サイトマップ | フィールズ南柏</title>
+      </Helmet>
       {/* Hero Section */}
       <section className="bg-gradient-to-r from-gray-600 to-gray-700 text-white py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

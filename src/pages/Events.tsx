@@ -1,4 +1,5 @@
 import { Link } from "react-router";
+import { Helmet } from "react-helmet-async";
 import { useEffect, useState } from "react";
 import { usePagination } from "@/hooks/usePagination";
 import { ImageWithFallback } from "../components/figma/ImageWithFallback";
@@ -63,6 +64,9 @@ export default function Events() {
 
   return (
     <div className="bg-gray-50 min-h-screen">
+      <Helmet>
+        <title>イベント | フィールズ南柏</title>
+      </Helmet>
       {/* Hero Section */}
       <section className="bg-gradient-to-r from-purple-600 to-purple-700 text-white py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
