@@ -21,6 +21,7 @@ export type ShopApiItem = {
     open_hours?: string;
     tel?: string;
     website_url?: string;
+    shop_order?: number;
   };
   _embedded?: {
     "wp:featuredmedia"?: WpMedia[];

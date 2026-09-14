@@ -6,7 +6,9 @@ import { toShopItem } from "../utils/shops";
 
 export const fetchShops = async (): Promise<ShopItem[]> => {
   const items = await fetchAllWpPages<ShopApiItem>(SHOPS_API_URL, { _embed: true });
-  return items.map(toShopItem);
+  return items
+    .sort((a, b) => (a.acf?.shop_order ?? Infinity) - (b.acf?.shop_order ?? Infinity))
+    .map(toShopItem);
 };
 
 export const fetchShopById = async (id: number): Promise<ShopItem> => {
