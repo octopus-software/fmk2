@@ -1,10 +1,11 @@
 import { Link } from "react-router";
 import { Helmet } from "react-helmet-async";
-import { Building2 } from "lucide-react";
 import { useEffect, useState } from "react";
+import floor1f from "@/assets/images/floor_1f.png";
+import floor2f from "@/assets/images/floor_2f.png";
+import floor3f from "@/assets/images/floor_3f.png";
 import { fetchShops } from "@/features/shops/api/fetchShops";
 import type { ShopItem } from "@/features/shops/types/shops";
-import { ImageWithFallback } from "../components/figma/ImageWithFallback";
 
 export default function FloorGuide() {
   const [shopsItems, setShopsItems] = useState<ShopItem[]>([]);
@@ -18,16 +19,19 @@ export default function FloorGuide() {
       id: "1F",
       name: "1F",
       color: "bg-blue-100 text-blue-600",
+      image: floor1f,
     },
     {
       id: "2F",
       name: "2F",
       color: "bg-orange-100 text-orange-600",
+      image: floor2f,
     },
     {
       id: "3F",
       name: "3F",
       color: "bg-green-100 text-green-600",
+      image: floor3f,
     },
   ];
 
@@ -107,17 +111,11 @@ export default function FloorGuide() {
 
               {/* Floor Map Image */}
               <div className="p-3 md:p-6 bg-gray-50">
-                <div className="bg-gray-200 rounded-lg flex items-center justify-center h-64">
-                  <div className="text-center">
-                    <Building2 className="w-16 h-16 text-gray-400 mx-auto mb-2" />
-                    <p className="text-gray-500 text-lg">
-                      フロアマップ
-                    </p>
-                    <p className="text-gray-400 text-sm">
-                      SAMPLE IMAGE
-                    </p>
-                  </div>
-                </div>
+                <img
+                  src={floor.image}
+                  alt={`${floor.name}フロアマップ`}
+                  className="w-full rounded-lg object-contain"
+                />
               </div>
 
               {/* Shop List Table */}
