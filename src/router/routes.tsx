@@ -12,6 +12,7 @@ import Access from "../pages/Access";
 import FloorGuide from "../pages/FloorGuide";
 import Sitemap from "../pages/Sitemap";
 import Contact from "../pages/Contact";
+import NotFound from "../pages/NotFound";
 
 export const router = createBrowserRouter([
   {
@@ -30,6 +31,7 @@ export const router = createBrowserRouter([
       { path: "events/:id", Component: EventDetail },
       { path: "pickups/:id", Component: PickupDetail },
       { path: "shops/:id", Component: ShopDetail },
+      { path: "*", Component: NotFound },
     ],
   },
 ]);
