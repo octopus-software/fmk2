@@ -345,7 +345,7 @@ export default function Home() {
                     alt={htmlToText(s.title?.rendered) || "ピックアップ画像"}
                     className="w-full aspect-square object-cover"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent flex flex-col justify-end p-6 md:p-8">
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/5 via-45% to-transparent flex flex-col justify-end p-6 md:p-8">
                     <p className="text-white text-sm md:text-base mb-2 opacity-90">
                       {s.acf?.pickup_period ?? ""}
                     </p>
@@ -370,7 +370,7 @@ export default function Home() {
                 alt={htmlToText(heroSlides[0].title?.rendered) || "ピックアップ画像"}
                 className="w-full aspect-square object-cover"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent flex flex-col justify-end p-6">
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/5 via-45% to-transparent flex flex-col justify-end p-6">
                 <p className="text-white text-sm mb-2 opacity-90">
                   {heroSlides[0].acf?.pickup_period ?? ""}
                 </p>
@@ -409,7 +409,7 @@ export default function Home() {
                         alt={htmlToText(s.title?.rendered) || "ピックアップ画像"}
                         className="w-full aspect-square object-cover"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent flex flex-col justify-end p-6 md:p-8">
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/5 via-45% to-transparent flex flex-col justify-end p-6 md:p-8">
                         <p className="text-white text-sm md:text-base mb-2 opacity-90">
                           {s.acf?.pickup_period ?? ""}
                         </p>
@@ -642,7 +642,7 @@ export default function Home() {
                     alt={shop.name}
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/5 via-45% to-transparent" />
                   <span className={`absolute top-2 right-2 text-sm px-2.5 py-1 rounded font-medium ${getFloorColor(shop.floor)}`}>
                     {shop.floor}
                   </span>
